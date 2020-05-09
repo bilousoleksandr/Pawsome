@@ -36,10 +36,7 @@ final class BreedsCollectionViewController : UICollectionViewController {
         network.allBreeds(onSuccess: { [weak self] (breeds) in
             guard let self = self else { fatalError() }
             self.allBreeds = breeds
-            print(breeds.map({$0.breedName}))
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
+            self.collectionView.reloadData()
         })
     }
     

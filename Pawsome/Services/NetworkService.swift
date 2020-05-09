@@ -8,19 +8,39 @@
 
 import UIKit
 
+// MARK: - POSTRequestModel
+struct PostRequest : Codable {
+    let imageID : String
+    let userID : String
+    let likeValue : Int
+    
+    enum CodingKeys : String, CodingKey {
+        case imageID = "image_id"
+        case userID = "sub_id"
+        case likeValue = "value"
+    }
+}
+
 protocol NetworkServiceHolder {
     var networkService : NetworkService { get }
 }
 
 protocol NetworkService {
-    /// download all breeds description
+    /// Dowload list of breeds and its description from server
 //    func allBreeds()
-    func getRandomCatImages(onSuccess: @escaping ([String]) -> ())
     
-    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?) -> ())
+    /// Return array of image urls from server with given amount of elements
+    func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ())
+    
+    /// Load data from given url and return UIImage and Data via callback clousure
+    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> ())
+    
+    /// Post users like to server with unique UUID
+    func postLike(_ value : Int, _ imageID : String)
 }
 
 final class NetworkServiceImplementation : NetworkService {
+    
     private let urlSession : URLSession
     
     init (urlSession : URLSession = URLSession.shared) {
@@ -34,7 +54,9 @@ final class NetworkServiceImplementation : NetworkService {
             }
             do {
                 let breeds = try JSONDecoder().decode([Breed].self, from: allData)
-                onSuccess(breeds)
+                DispatchQueue.main.async {
+                    onSuccess(breeds)
+                }
             } catch {
                 print(error.localizedDescription)
             }
@@ -42,8 +64,8 @@ final class NetworkServiceImplementation : NetworkService {
         dataTask.resume()
     }
     
-    func getRandomCatImages(onSuccess: @escaping ([String]) -> ()) {
-        let urlName = "images/search?limit=15&order=RAND&size=thumb"
+    func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ()) {
+        let urlName = "images/search?limit=\(imgCount)&order=\(ImagesOrder.random)&size=small"
         let dataTask = urlSession.dataTask(with: makeRequest(with: urlName)) { (data, response, error) in
             guard let allData = data, error == nil else {
                 return
@@ -60,45 +82,75 @@ final class NetworkServiceImplementation : NetworkService {
         dataTask.resume()
     }
     
-    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?) -> ()) {
+    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> ()) {
         guard let imageUrl = URL(string: url) else {
             fatalError()
         }
         let dataTask = urlSession.dataTask(with: imageUrl, completionHandler: { (data, response, error) in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async {
-                onSuccess(UIImage(data: data))
+                onSuccess(UIImage(data: data), data)
             }
         })
         dataTask.resume()
     }
+    
+    func postLike(_ value : Int, _ imageID : String) {
+        do {
+            let postData = try JSONEncoder().encode(PostRequest(imageID: "MTg1NjkxNQ",
+                                                                userID: UIDevice.uniqID(),
+                                                                likeValue: value))
+            let request = makeRequest(with: Constants.likes,
+                                      httpMethod: HTTPMethods.post,
+                                      data: postData,
+                                      header: Constants.postHeader)
+            let task = urlSession.dataTask(with: request) { (_, response, error) in
+                guard error == nil else {
+                    print(error)
+                    return
+                }
+                let httpResponse = response as? HTTPURLResponse
+                print(httpResponse)
+            }
+            task.resume()
+        } catch {
+            
+        }
+    }
 }
 
 private extension NetworkServiceImplementation {
-    private func makeRequest(with url: String) -> URLRequest {
+    func makeRequest(with url: String,
+                     httpMethod : String = HTTPMethods.get,
+                     data : Data? = nil,
+                     header : [String : String] = Constants.getHeader) -> URLRequest {
         guard let url = URL(string: "\(Constants.host)\(url)") else {
             fatalError()
         }
-        print(url.absoluteString)
         let request = NSMutableURLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
-        request.httpMethod = HTTPMethods.get
-        request.allHTTPHeaderFields = Constants.headers
+        request.httpMethod = httpMethod
+        request.allHTTPHeaderFields = header
+        if let postedData = data {
+            request.httpBody = postedData
+        }
         return request as URLRequest
     }
     
-    private enum Constants {
-        static let headers = ["x-api-key": "b8148468-b823-4b33-b6ca-4a6c994d0635"]
+    enum Constants {
+        static let getHeader = ["x-api-key": "b8148468-b823-4b33-b6ca-4a6c994d0635"]
+        static let postHeader = ["x-api-key": "b8148468-b823-4b33-b6ca-4a6c994d0635", "content-type": "application/json"]
         static let host = "https://api.thecatapi.com/v1/"
         static let breedsUrl = "breeds"
+        static let likes = "votes"
     }
     
-    private enum ImagesOrder {
+    enum ImagesOrder {
         static let random = "RAND"
         static let ascending = "ASC"
         static let descending = "DESC"
     }
     
-    private enum HTTPMethods {
+    enum HTTPMethods {
         static let get = "GET"
         static let post = "POST"
     }

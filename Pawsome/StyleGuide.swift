@@ -16,8 +16,8 @@ struct StyleGuide {
     }
     
     enum CornersRadius {
-        static let largeView       : CGFloat      = 20
-        static let buttons         : CGFloat      = 10
-        static let mediumView      : CGFloat      = 8
+        static let largeView  : CGFloat = 20
+        static let buttons    : CGFloat = 10
+        static let mediumView : CGFloat = 8
     }
 }

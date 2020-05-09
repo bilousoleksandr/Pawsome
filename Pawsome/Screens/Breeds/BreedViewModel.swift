@@ -9,7 +9,6 @@
 import UIKit
 
 // MARK: - BreedFeature
-
 struct BreedFeature {
     let featureName : String
     let index : Int
@@ -78,13 +77,13 @@ class BreedViewModel : BreedViewModelProtocol {
     
     var breedFeatures : [BreedFeature] {
         var features : [BreedFeature] = []
-        features.append(BreedFeature(featureName: Strings.strangerFriendly, index: breed.strangerFriendly, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.socialNeeds, index: breed.socialNeeds, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.intelligence, index: breed.intelligence, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.energyLevel, index: breed.energyLevel, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.dogFriendly, index: breed.dogFriendly, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.childFriendly, index: breed.childFriendly, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
-        features.append(BreedFeature(featureName: Strings.adaptability, index: breed.adaptability, commonImage: #imageLiteral(resourceName: "shapes"), highlightedImage: #imageLiteral(resourceName: "shapes_high")))
+        features.append(BreedFeature(featureName: Strings.strangerFriendly, index: breed.strangerFriendly, commonImage: #imageLiteral(resourceName: "strangerFriendlyCommon"), highlightedImage: #imageLiteral(resourceName: "strangerFriendly")))
+        features.append(BreedFeature(featureName: Strings.socialNeeds, index: breed.socialNeeds, commonImage: #imageLiteral(resourceName: "socialNeedsCommon"), highlightedImage: #imageLiteral(resourceName: "socialNeeds")))
+        features.append(BreedFeature(featureName: Strings.intelligence, index: breed.intelligence, commonImage: #imageLiteral(resourceName: "brainCommon"), highlightedImage: #imageLiteral(resourceName: "brain")))
+        features.append(BreedFeature(featureName: Strings.energyLevel, index: breed.energyLevel, commonImage: #imageLiteral(resourceName: "energyCommon"), highlightedImage: #imageLiteral(resourceName: "energy")))
+        features.append(BreedFeature(featureName: Strings.dogFriendly, index: breed.dogFriendly, commonImage: #imageLiteral(resourceName: "dogFriendlyCommon"), highlightedImage: #imageLiteral(resourceName: "dogFriendly")))
+        features.append(BreedFeature(featureName: Strings.childFriendly, index: breed.childFriendly, commonImage: #imageLiteral(resourceName: "childCommon"), highlightedImage: #imageLiteral(resourceName: "child")))
+        features.append(BreedFeature(featureName: Strings.adaptability, index: breed.adaptability, commonImage: #imageLiteral(resourceName: "adaptabilityCommon"), highlightedImage: #imageLiteral(resourceName: "adaptability")))
         print(breed.experimental)
         return features
     }

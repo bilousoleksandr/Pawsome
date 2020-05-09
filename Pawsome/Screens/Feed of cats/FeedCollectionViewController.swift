@@ -15,6 +15,7 @@ final class FeedCollectionViewController : UICollectionViewController {
     init() {
         let flowLayout = CatFeedLayout()
         super.init(collectionViewLayout: flowLayout)
+        navigationItem.title = Strings.feed
     }
     
     required init?(coder: NSCoder) {
@@ -25,22 +26,28 @@ final class FeedCollectionViewController : UICollectionViewController {
         super.viewDidLoad()
         collectionView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         collectionView.delegate = self
-        collectionView.register(SingleViewFeedCell.self, forCellWithReuseIdentifier: "id")
+        collectionView.registerReusableCell(SingleViewFeedCell.self)
         
         feedViewModel.imagesListDidChange = { [weak self] (feedViewModel) in
             guard let self = self else { fatalError() }
-            print("reloaddata")
-            self.collectionView.reloadData()
+            UIView.transition(with: self.collectionView,
+                              duration: 0.3,
+                              options: .transitionCrossDissolve,
+                              animations: { self.collectionView.reloadData() })
+            self.updateRefreshControl()
         }
         
         feedViewModel.imageForIndexDidLoad = { [weak self] (indexPath) in
             guard let self = self else { fatalError() }
             if self.collectionView.numberOfSections - 1 >= indexPath.section && self.collectionView.numberOfItems(inSection: indexPath.section) >= indexPath.row {
-                UIView.animate(withDuration: 0) {
-                    self.collectionView.reloadItems(at: [indexPath])
-                }
+                self.collectionView.reloadItems(at: [indexPath])
             }
         }
+        
+        collectionView.refreshControl = UIRefreshControl()
+        collectionView.refreshControl?.addTarget(self,
+                                            action: #selector(refreshPage(sender:)),
+                                            for: .valueChanged)
     }
     
     private func indexPathToIndex(indexPath : IndexPath) -> Int {
@@ -50,11 +57,22 @@ final class FeedCollectionViewController : UICollectionViewController {
         let sectionIndex = Array(0..<indexPath.section).map({ $0 % 2 == 0 ? 3 : 6 }).reduce(0, +)
         return sectionIndex + indexPath.row
     }
+    
+    private func updateRefreshControl() {
+        if let _ = collectionView.refreshControl?.isRefreshing {
+            collectionView.refreshControl?.endRefreshing()
+        }
+    }
 }
 
 // MARK: - Actions -
 extension FeedCollectionViewController {
-    
+    @objc
+    func refreshPage(sender: UIRefreshControl) {
+        feedViewModel.removeAllImages()
+        collectionView.reloadData()
+        feedViewModel.showNewImages()
+    }
 }
 
 // MARK: - UICollectionViewDataSource -
@@ -68,8 +86,10 @@ extension FeedCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! SingleViewFeedCell
-        cell.configure(with: feedViewModel.image(for: indexPathToIndex(indexPath: indexPath), with : indexPath))
+        guard let cell = collectionView.dequeueReusableCell(SingleViewFeedCell.self, for: indexPath) else { fatalError() }
+        feedViewModel.getImage(for: indexPathToIndex(indexPath: indexPath), with: indexPath, complition: { (image) in
+            cell.configure(with: image)
+        })
         return cell
     }
     
@@ -82,13 +102,18 @@ extension FeedCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let maxSection = collectionView.numberOfSections - 1
-        if indexPath.section == maxSection && indexPath.row == collectionView.numberOfItems(inSection: maxSection) - 1 {
+        let maxSection = collectionView.numberOfSections
+        if indexPath.section == maxSection - 2 {
             feedViewModel.showNewImages()
         }
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        feedViewModel.getImage(for: indexPathToIndex(indexPath: indexPath), with: indexPath) { (image) in
+            let imageURL = self.feedViewModel.urlForPressedImage(at: self.indexPathToIndex(indexPath: indexPath))
+            let vc = FullScreenViewController(fullScreenViewModel: FullScrenViewModel(imageURL))
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 

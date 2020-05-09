@@ -21,4 +21,5 @@ final class Strings {
     static let experimental = "Experimental:"
     static let adaptability = "Adaptability:"
     static let childFriendly = "Child friendly:"
+    static let saved = "Saved"
 }

@@ -27,69 +27,68 @@ protocol FeedViewModelProtocol : class {
     func showNewImages()
     
     /// Get cached images
-    func image(for index: Int, with indexPath: IndexPath) -> UIImage?
+    func getImage(for index: Int, with indexPath: IndexPath, complition: @escaping (UIImage?) -> Void)
+    
+    /// Delete all images from canvas and refresh urls list
+    func removeAllImages()
+    
+    /// Get site URL for selected image
+    func urlForPressedImage(at index : Int) -> String
 }
 
 class FeedViewModel : FeedViewModelProtocol {
     private let feed : Feed
+    private let batchCount = 18
     private let networkService : NetworkService
-    private var imagesCount = 0 {
-        didSet {
-            if imagesCount == 15, let saveResult = imagesListDidChange {
-                saveResult(self)
-            }
-        }
-    }
-    private var cachedImages = NSCache<AnyObject, UIImage>() {
-        didSet {
-            if let saveResult = imagesListDidChange {
-                saveResult(self)
-            }
-        }
-    }
-    
+    private let fileManagerService : FileManagerService
     var imagesListDidChange : ((FeedViewModelProtocol) -> ())?
     var imageForIndexDidLoad : ((IndexPath) -> ())?
+    var urls : [String] = [] {
+        didSet {
+            if urls.count > 0 && urls.count % batchCount == 0, let saveResult = imagesListDidChange {
+                saveResult(self)
+            }
+        }
+    }
     
-    var urls : [String] = []
-    
-    init(feed : Feed, networkService: NetworkService = NetworkServiceImplementation()) {
+    init(feed : Feed,
+         networkService: NetworkService = AppDelegate.shared.context.networkService,
+         fileManagerService: FileManagerService = AppDelegate.shared.context.fileManagerService) {
         self.feed = feed
         self.networkService = networkService
-        cachedImages.countLimit = 150
+        self.fileManagerService = fileManagerService
         loadImagesUrls()
     }
     
     private func loadImagesUrls() {
-        imagesCount = 0
-        networkService.getRandomCatImages { [weak self] (imagesList) in
-            print(imagesList)
+        networkService.getRandomCatImages(imgCount: 18) { [weak self] (imagesList) in
             guard let self = self else { fatalError() }
-            self.urls.append(contentsOf: imagesList)
-            imagesList.forEach {
-                guard let index = self.urls.firstIndex(of: $0) else { fatalError() }
-                self.networkService.downloadImage(atUrl: $0) { (image) in
-                    self.cachedImages.setObject(image!, forKey: index as AnyObject)
-                    self.imagesCount += 1
+            imagesList.forEach { imageUrl in
+                self.networkService.downloadImage(atUrl: imageUrl) { (image, data) in
+                    self.fileManagerService.saveImage(data, at: imageUrl, onSuccess: {
+                        self.urls.append(imageUrl)
+                    })
                 }
             }
         }
     }
     
-    func image(for index: Int, with indexPath: IndexPath) -> UIImage? {
-        if let image = cachedImages.object(forKey: index as AnyObject) {
-            return image
-        } else {
-            networkService.downloadImage(atUrl: urls[index]) { [weak self] (image) in
-                guard let self = self, let callbackForImage = self.imageForIndexDidLoad else { fatalError() }
-                self.cachedImages.setObject(image!, forKey: index as AnyObject)
-                callbackForImage(indexPath)
-            }
+    func getImage(for index: Int, with indexPath: IndexPath, complition: @escaping (UIImage?) -> Void) {
+        fileManagerService.fetchImage(at: urls[index]) { (image) in
+            complition(image)
         }
-        return nil
     }
     
     func showNewImages() {
         loadImagesUrls()
+    }
+    
+    func removeAllImages() {
+        fileManagerService.deleteAllItems(at: urls)
+        urls.removeAll()
+    }
+    
+    func urlForPressedImage(at index : Int) -> String {
+        return urls[index]
     }
 }

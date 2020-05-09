@@ -20,7 +20,10 @@ final class RootTabBarViewController : UITabBarController {
         let feedVC = FeedCollectionViewController()
         feedVC.tabBarItem = UITabBarItem(title: Strings.feed, image: #imageLiteral(resourceName: "cat"), selectedImage: nil)
         
-        let navControllers = [breedsVC, feedVC].map { UINavigationController(rootViewController: $0) }
+        let savedVC = SavedImagesViewController()
+        savedVC.tabBarItem = UITabBarItem(title: Strings.saved, image: #imageLiteral(resourceName: "cat"), selectedImage: nil)
+        
+        let navControllers = [breedsVC, feedVC, savedVC].map { UINavigationController(rootViewController: $0) }
         setViewControllers(navControllers, animated: true)
     }
 }
