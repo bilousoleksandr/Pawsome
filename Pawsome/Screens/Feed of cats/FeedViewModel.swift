@@ -84,8 +84,9 @@ class FeedViewModel : FeedViewModelProtocol {
     }
     
     func removeAllImages() {
-        fileManagerService.deleteAllItems(at: urls)
+        let urlCopy = urls
         urls.removeAll()
+        fileManagerService.deleteAllItems(at: urlCopy)
     }
     
     func urlForPressedImage(at index : Int) -> String {

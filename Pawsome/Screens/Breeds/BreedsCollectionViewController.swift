@@ -10,12 +10,10 @@ import UIKit
 
 final class BreedsCollectionViewController : UICollectionViewController {
     private var allBreeds : [Breed] = []
-    private var longTapPressed = false
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
         navigationItem.title = Strings.breeds
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     required init?(coder: NSCoder) {
@@ -27,7 +25,8 @@ final class BreedsCollectionViewController : UICollectionViewController {
         collectionView.backgroundColor =  #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         collectionView.delegate = self
-        collectionView.register(SingleBreedCollectionViewCell.self, forCellWithReuseIdentifier: "id")
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        collectionView.registerReusableCell(SingleBreedCollectionViewCell.self)
         
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapPressed(sender:)))
         collectionView.addGestureRecognizer(longTapGesture)
@@ -40,28 +39,28 @@ final class BreedsCollectionViewController : UICollectionViewController {
         })
     }
     
-}
-
-// MARK: - Actions -
-extension BreedsCollectionViewController : UIPopoverPresentationControllerDelegate{
-    @objc func longTapPressed(sender: UILongPressGestureRecognizer) {
-        if !longTapPressed {
-            let tapLocation = sender.location(in: collectionView)
-            if let indexPath = collectionView.indexPathForItem(at: tapLocation) {
-                let breedAtIndex = BreedViewModel(breed: allBreeds[indexPath.row])
-                let vc = BreedShortInfoViewController(breedMViewModel: breedAtIndex)
-                showFullScreen(vc)
-            }
-            longTapPressed = !longTapPressed
-        }
-        if sender.state == .ended {
-            presentedViewController?.dismiss(animated: true, completion: nil)
-            longTapPressed = false
+    private func longPressStartedHandler (at point : CGPoint) {
+        if let indexPath = collectionView.indexPathForItem(at: point) {
+            let breedAtIndex = BreedViewModel(breed: allBreeds[indexPath.row])
+            let vc = BreedShortInfoViewController(breedMViewModel: breedAtIndex)
+            showFullScreen(vc)
         }
     }
     
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
+    private func longPressEndedHandler() {
+        presentedViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - Actions -
+@objc
+extension BreedsCollectionViewController : UIPopoverPresentationControllerDelegate{
+    func longTapPressed(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            longPressStartedHandler(at: sender.location(in: collectionView))
+        } else if sender.state == .ended || sender.state == .cancelled {
+            longPressEndedHandler()
+        }
     }
 }
 
@@ -76,10 +75,8 @@ extension BreedsCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "id", for: indexPath) as! SingleBreedCollectionViewCell
-        cell.configure(with: allBreeds[indexPath.row].breedName)
-        cell.layer.borderWidth = 2
-        cell.layer.borderColor = UIColor.blus.cgColor
+        guard let cell = collectionView.dequeueReusableCell(SingleBreedCollectionViewCell.self, for: indexPath) else { fatalError() }
+        cell.configure(with: allBreeds[indexPath.row].breedName, and: allBreeds[indexPath.row].origin)
         return cell
     }
 }
@@ -87,26 +84,20 @@ extension BreedsCollectionViewController {
 // MARK: - UICollectionFlowLayoutDelegate
 extension BreedsCollectionViewController : UICollectionViewDelegateFlowLayout {
     private var smallItemSize : CGFloat {
-        return (view.bounds.width - 1) / 2
+        return (collectionView.bounds.width - 15) / 2
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let size : CGSize
-        if indexPath.row % 7 == 0 || indexPath.row == (collectionView.numberOfItems(inSection: indexPath.section) - 1) && indexPath.row % 2 == 0 {
-            size = CGSize(width: view.bounds.width, height: view.bounds.width / 2)
-        } else {
-            size = CGSize(width: smallItemSize, height: smallItemSize)
-        }
-        return size
+        return CGSize(width: smallItemSize, height: smallItemSize * 1.5)
                                                                                                                               
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return 5
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -14,6 +14,31 @@ extension UIViewController {
                          animated: Bool = true,
                          competition : (() -> Void)? = nil) {
         viewController.modalPresentationStyle = .overFullScreen
+        viewController.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(screenDidTap(sender:))))
         present(viewController, animated: animated, completion: competition)
+    }
+    
+    /// Present given image over full screen
+    func showLagreImage(_ image : UIImage?) {
+        let vc = UIViewController()
+        vc.view.makeBlur()
+        let imageView = UIImageView(image: image)
+        
+        vc.view.addSubview(imageView)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.widthAnchor.constraint(equalToConstant: UIScreen.screenWidth() - StyleGuide.Spaces.double).isActive = true
+        imageView.heightAnchor.constraint(equalToConstant: UIScreen.screenWidth() - StyleGuide.Spaces.double).isActive = true
+        imageView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
+        imageView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
+        imageView.roundCorners(radius: StyleGuide.CornersRadius.largeView)
+        imageView.makeShadow()
+        showFullScreen(vc)
+    }
+}
+
+// MARK: - Actions
+extension UIViewController {
+    @objc func screenDidTap(sender: UITapGestureRecognizer) {
+        dismiss(animated: true, completion: nil)
     }
 }

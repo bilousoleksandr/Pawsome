@@ -12,18 +12,32 @@ final class RootTabBarViewController : UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tabBar.tintColor = UIColor.indianred
+        tabBar.barTintColor = UIColor.lightBlue
+        
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let breedsVC = BreedsCollectionViewController(collectionViewLayout: layout)
-        breedsVC.tabBarItem = UITabBarItem(title: Strings.breeds, image: #imageLiteral(resourceName: "cat"), selectedImage: nil)
+        breedsVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "breedTabBar"), selectedImage: nil)
         
         let feedVC = FeedCollectionViewController()
-        feedVC.tabBarItem = UITabBarItem(title: Strings.feed, image: #imageLiteral(resourceName: "cat"), selectedImage: nil)
+        feedVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "feedTabBar"), selectedImage: nil)
         
         let savedVC = SavedImagesViewController()
-        savedVC.tabBarItem = UITabBarItem(title: Strings.saved, image: #imageLiteral(resourceName: "cat"), selectedImage: nil)
+        savedVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "savedImagesTabBar"), selectedImage: nil)
         
         let navControllers = [breedsVC, feedVC, savedVC].map { UINavigationController(rootViewController: $0) }
         setViewControllers(navControllers, animated: true)
     }
 }
+
+// MARK: - UITabBarDelegate
+extension RootTabBarViewController {
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        tabBar.subviews.forEach { $0.layer.removeAllAnimations() }
+        guard let firstIndex = tabBar.items?.firstIndex(of: item), tabBar.subviews.count > firstIndex + 1 else { return }
+        let imageView = tabBar.subviews[firstIndex + 1]
+        imageView.makePulse()
+    }
+}
+

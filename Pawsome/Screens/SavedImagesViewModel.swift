@@ -34,7 +34,6 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
         return imageUrls.count
     }
     
-    
     init(userDefaultsService : UserDefaultService = AppDelegate.shared.context.userDefaultService,
          fileManagerService : FileManagerService = AppDelegate.shared.context.fileManagerService) {
         self.userDefaultsService = userDefaultsService

@@ -34,7 +34,6 @@ final class BreedShortInfoViewController : UIViewController {
     
     private func setupView() {
         view.makeBlur()
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(screenDidTap(sender:))))
         view.addSubview(shortInfoView)
         shortInfoView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -42,12 +41,5 @@ final class BreedShortInfoViewController : UIViewController {
             shortInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -StyleGuide.Spaces.single),
             shortInfoView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0)
         ])
-    }
-}
-
-// MARK: - Actions -
-extension BreedShortInfoViewController {
-    @objc func screenDidTap(sender: UITapGestureRecognizer) {
-        dismiss(animated: true, completion: nil)
     }
 }

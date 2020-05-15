@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  Pawsome
+
+  Created by Marentilo on 15.05.2020.
+  Copyright © 2020 Marentilo. All rights reserved.
+*/
+"breeds" = "Breeds";
+"singleBreed" = "Single Breed";
+"feed" = "Feed";
+"origin" = "Origin:";
+"strangerFriendly" = "Stranger friendly:";
+"socialNeeds" = "Social needs:";
+"intelligence" = "Intelligence:";
+"energyLevel" = "Energy level:";
+"dogFriendly" = "Dog friendly:";
+"experimental" = "Experimental:";
+"adaptability" = "Adaptability:";
+"childFriendly" = "Child friendly:";
+"saved" = "Saved";
+"similarCats" = "Similar cats";
+"rare" = "Rare:";
+"natural" = "Natural:";
+"weight" = "Weight";
+"kg" = "kg";
+"lifeSpan" = "Life span";
+"years" = "yr";

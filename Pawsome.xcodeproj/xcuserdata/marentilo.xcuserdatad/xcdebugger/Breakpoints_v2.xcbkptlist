@@ -14,8 +14,8 @@
             filePath = "Pawsome/Screens/RootTabBarViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "Pawsome/Screens/RootTabBarViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "Pawsome/Screens/Feed of cats/CatFeedlayout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
             landmarkName = "widthForSplitSection(section:)"
             landmarkType = "7">
             <Locations>
@@ -146,38 +146,6 @@
             endingLineNumber = "20"
             landmarkName = "CornersRadius"
             landmarkType = "13">
-            <Locations>
-               <Location
-                  uuid = "C337116B-5CBB-49B7-B0BA-71AEA23AF826 - 799e33a9f40d2877"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "globalinit_33_135E0B5B6E2AC347787194099526A907_func3"
-                  moduleName = "Pawsome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/marentilo/Git/Pawsome/Pawsome/StyleGuide.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "12">
-               </Location>
-               <Location
-                  uuid = "C337116B-5CBB-49B7-B0BA-71AEA23AF826 - b4f712ae3a54d1d3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Pawsome.StyleGuide.CornersRadius.buttons.unsafeMutableAddressor : CoreGraphics.CGFloat"
-                  moduleName = "Pawsome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/marentilo/Git/Pawsome/Pawsome/StyleGuide.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "20"
-                  endingLineNumber = "20"
-                  offsetFromSymbolStart = "4">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

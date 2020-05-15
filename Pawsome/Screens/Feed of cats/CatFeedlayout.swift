@@ -9,6 +9,7 @@
 import UIKit
 
 final class CatFeedLayout : UICollectionViewLayout {
+    private var lastSectionIndex : Int = 0
     private let maxColumnNumber = 3
     private let cellPadding: CGFloat = 3
     private var cache: [UICollectionViewLayoutAttributes] = []
@@ -42,6 +43,11 @@ final class CatFeedLayout : UICollectionViewLayout {
         guard let collectionView = collectionView else {
             fatalError()
         }
+        if collectionView.numberOfSections < lastSectionIndex {
+            cache.removeAll()
+        }
+        lastSectionIndex = collectionView.numberOfSections
+        
         var yOffset: [CGFloat] = .init(repeating: 0, count: maxColumnNumber)
         
         for section in 0..<collectionView.numberOfSections {
@@ -89,6 +95,10 @@ final class CatFeedLayout : UICollectionViewLayout {
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
       return cache[indexPath.item]
+    }
+    
+    func cleanCache () {
+        cache.removeAll()
     }
 }
 

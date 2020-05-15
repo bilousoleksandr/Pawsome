@@ -47,8 +47,13 @@ final class SingleBreedViewController : UIViewController {
         scrollView.configureBreedView(name: breedViewModel.breedName,
                                       origin: breedViewModel.origin,
                                       friendlyText: breedViewModel.strangerFriendly,
+                                      weight: breedViewModel.averageWeight,
+                                      lifeSpan: breedViewModel.averageLifeSpan,
                                       breedText: breedViewModel.breedDescription,
-                                      breedFeatures: breedViewModel.breedFeatures)
+                                      breedFeatures: breedViewModel.breedFeatures,
+                                      rare: breedViewModel.rare,
+                                      experimental: breedViewModel.experimental,
+                                      natural: breedViewModel.natural)
     }
 
     private func setupView() {

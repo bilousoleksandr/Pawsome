@@ -14,7 +14,7 @@ final class FullScreenViewController : UITableViewController {
     init(fullScreenViewModel : FullScrenViewModel) {
         self.fullScreenViewModel = fullScreenViewModel
         super.init(style: .plain)
-        print(UIDevice.uniqID())
+        navigationItem.title = Strings.similarCats
     }
     
     required init?(coder: NSCoder) {
@@ -29,9 +29,6 @@ final class FullScreenViewController : UITableViewController {
                                                            target: self,
                                                            action: #selector(backButtonPressed(sender:)))
         
-        tableView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(pinchGestureIsActive(sender:))))
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 300
         fullScreenViewModel.imagesListDidChange = { [weak self] _ in
             guard let self = self else { fatalError() }
             let currentIndex = self.tableView.numberOfRows(inSection: 0)
@@ -39,11 +36,32 @@ final class FullScreenViewController : UITableViewController {
             if currentIndex < newIndexes {
                 let indexes = Array(currentIndex...newIndexes).map({ IndexPath(row: $0, section: 0)})
                 self.tableView.performBatchUpdates({
-                    self.tableView.insertRows(at: indexes, with: .fade)
+                    self.tableView.insertRows(at: indexes, with: .none)
                 }, completion: nil)
             }
         }
         fullScreenViewModel.showNewImages()
+    }
+    
+    private func savedButtonDidPress(_ image: UIImage?, at cell : UITableViewCell, isSaved : Bool) {
+        guard isSaved else { return }
+        let startPoint = cell.frame.origin
+        let savedImageView = UIImageView(frame: CGRect(origin: startPoint,
+                                                       size: CGSize(width: UIScreen.screenWidth(),
+                                                                    height: UIScreen.screenWidth())))
+        
+        savedImageView.contentMode = .scaleAspectFit
+        savedImageView.image = image
+        self.view.addSubview(savedImageView)
+        if let endPoint = tabBarController?.tabBar.subviews.last?.frame,
+            let frame = tabBarController?.tabBar.convert(endPoint, to: view) {
+            UIView.animateKeyframes(withDuration: 0.45, delay: 0, options: .calculationModeCubicPaced, animations: {
+                savedImageView.center = CGPoint(x: frame.midX, y: frame.midY)
+                savedImageView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+            }) { (_) in
+                savedImageView.removeFromSuperview()
+            }
+        }
     }
 }
 
@@ -72,6 +90,7 @@ extension FullScreenViewController {
                               isLiked: self.fullScreenViewModel.isLikedImage(for: indexPath.row),
                               saveAction: {
                                     self.fullScreenViewModel.saveImage(at: indexPath.row)
+                                    self.savedButtonDidPress(image, at: itemCell, isSaved: self.fullScreenViewModel.isSavedImage(for: indexPath.row))
                               }, likeAction: {
                                     self.fullScreenViewModel.likeImage(at: indexPath.row)
                               })
@@ -87,13 +106,5 @@ private extension FullScreenViewController {
     func backButtonPressed(sender: UIBarButtonItem) {
         fullScreenViewModel.removeAllImages()
         self.navigationController?.popViewController(animated: true)
-    }
-    
-    func pinchGestureIsActive(sender : UIPinchGestureRecognizer) {
-        print(sender)
-        if let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) {
-            let rect = tableView.rectForRow(at: indexPath)
-            print(indexPath)
-        }
     }
 }

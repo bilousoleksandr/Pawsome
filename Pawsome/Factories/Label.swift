@@ -9,23 +9,30 @@
 import UIKit
 
 struct Label {
-    
+    /// Standart title label with two lines
     static func makeTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .color(textColor)
-            .font(UIFont.boldSystemFont(ofSize: 30))
+            .font(UIFont.boldSystemFont(ofSize: 26))
             .text(title)
-            .lines(0)
+            .lines(2)
             .lineBreak(.byWordWrapping)
+    }
+    
+    /// Title for breeds in collectionView
+    static func makeBreedTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
+        Label.makeTitleLabel()
+            .font(UIFont.boldSystemFont(ofSize: 24))
     }
     
     static func makeSubtitleLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .color(textColor)
-            .font(UIFont.systemFont(ofSize: 16))
+            .font(UIFont.systemFont(ofSize: 18))
             .text(title)
     }
     
+    /// Multiline title for breed description
     static func makeBreedDescriptionLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .font(UIFont.systemFont(ofSize: 16))

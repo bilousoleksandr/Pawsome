@@ -15,4 +15,12 @@ struct Button {
         button.setImage(selectedStateImage, for: .selected)
         return button
     }
+    
+    static func makeButton(_ title : String? = nil, backgroundColor : UIColor? = UIColor.lightBlue) -> UIButton {
+        let button = UIButton(type: .custom)
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(UIColor.blus, for: .normal)
+        button.backgroundColor = backgroundColor
+        return button
+    }
 }

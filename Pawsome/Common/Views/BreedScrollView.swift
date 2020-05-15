@@ -14,7 +14,7 @@ final class BreedScrollView : UIScrollView {
     private let averageInfoView = UIView()
     private let textView = UIView()
     private let bottomView = UIView()
-    private let screenWidth = UIScreen.main.bounds.width
+    private let screenWidth = UIScreen.screenWidth()
     private let lifeSpanView = HeaderDetailsView()
     private let weightView = HeaderDetailsView()
     private let textLabel = Label.makeBreedDescriptionLabel()
@@ -137,10 +137,13 @@ final class BreedScrollView : UIScrollView {
         NSLayoutConstraint.activate(constraints)
     }
     
-    func configureBreedView(name: String, origin: String, friendlyText : String, breedText: String, breedFeatures : [BreedFeature]) {
-        headerView.configure(name: name, origin: origin, friendlyText: friendlyText)
-        lifeSpanView.configure()
-        weightView.configure()
+    func configureBreedView(name: String, origin: String, friendlyText : String,
+                            weight : String, lifeSpan : String,
+                            breedText: String, breedFeatures : [BreedFeature],
+                            rare : Int, experimental : Int, natural : Int) {
+        headerView.configure(name: name, origin: origin, friendlyText: friendlyText, rare: rare, experimental: experimental, natural: natural)
+        lifeSpanView.configure(value: weight, details: .weight)
+        weightView.configure(value: lifeSpan, details: .lifeSpan)
         textLabel.text = breedText
         for (index, feature) in breedFeatures.enumerated() {
             breedFeachuresView[index].configure(with: feature.featureName,

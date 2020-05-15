@@ -10,12 +10,16 @@ import UIKit
 
 final class SavedImagesViewController : UICollectionViewController {
     private var savedImagesModel : SavedImagesViewModelProtocol
+    private let segmentedController = SegmentedController(titles: ["Liked", "Saved"], selectedSection: 0) { (value) in
+        print(value)
+    }
     
     init(savedImagesModel : SavedImagesViewModelProtocol = SavedImagesViewModel()) {
         self.savedImagesModel = savedImagesModel
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         super.init(collectionViewLayout: layout)
+        navigationController?.navigationBar.backgroundColor = UIColor.lightBlue
     }
     
     required init?(coder: NSCoder) {
@@ -24,16 +28,39 @@ final class SavedImagesViewController : UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.delegate = self
-        collectionView.registerReusableCell(SingleViewFeedCell.self)
-        savedImagesModel.urlsArrayDidUpdate = { [weak self] _ in
-            self?.collectionView.reloadData()
-        }
+        setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.collectionView.reloadData()
+    }
+    
+    private func setupView() {
+        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        collectionView.delegate = self
+        collectionView.registerReusableCell(SingleViewFeedCell.self)
+        collectionView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        savedImagesModel.urlsArrayDidUpdate = { [weak self] _ in
+            self?.collectionView.reloadData()
+        }
+        view.addSubview(segmentedController)
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
+        [segmentedController, collectionView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        NSLayoutConstraint.activate([
+            segmentedController.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            segmentedController.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            segmentedController.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            segmentedController.heightAnchor.constraint(equalToConstant: 40),
+            
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            collectionView.topAnchor.constraint(equalTo: segmentedController.bottomAnchor, constant: 0),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        ])
     }
 }
 

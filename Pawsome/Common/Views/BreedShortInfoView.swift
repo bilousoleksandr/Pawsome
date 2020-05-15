@@ -54,7 +54,7 @@ final class BreedShortInfoView : UIView {
     }
     
     private func setupConstrains() {
-        let viewWidth = UIScreen.main.bounds.width - StyleGuide.Spaces.single * 2
+        let viewWidth = UIScreen.screenWidth() - StyleGuide.Spaces.single * 2
         let imageHeight = viewWidth / 2
         
         let constrains = [

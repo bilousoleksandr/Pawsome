@@ -8,6 +8,11 @@
 
 import UIKit
 
+enum BreedDetails {
+    case weight
+    case lifeSpan
+}
+
 final class HeaderDetailsView : UIView {
     private let iconView = UIImageView()
     private let infoLabel = Label.makeSubtitleLabel()
@@ -52,18 +57,17 @@ final class HeaderDetailsView : UIView {
         NSLayoutConstraint.activate(constrains)
     }
     
-    func configure () {
-        iconView.image = #imageLiteral(resourceName: "business")
-       if Int.random(in: 0...10) < 4 {
-           infoLabel.text = "Weight"
-           valueLabel.text = "5-10"
-           valueDetailsLabel.text = "kg"
-       } else {
-           infoLabel.text = "Life span"
-           valueLabel.text = "12-10"
-           valueDetailsLabel.text = "yr"
-       }
+    func configure (value : String, details : BreedDetails) {
+        valueLabel.text = value
+        switch details {
+        case .weight:
+            infoLabel.text = Strings.weight
+            valueDetailsLabel.text = Strings.kg
+            iconView.image = #imageLiteral(resourceName: "weight")
+        case .lifeSpan:
+            infoLabel.text = Strings.lifeSpan
+            valueDetailsLabel.text = Strings.years
+            iconView.image = #imageLiteral(resourceName: "lifespan")
+        }
     }
-    
-    
 }

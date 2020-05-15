@@ -39,8 +39,6 @@ final class SingleViewFeedCell : UICollectionViewCell {
     }
     
     func configure(with image : UIImage? = #imageLiteral(resourceName: "s1200")) {
-//        let newSize = CGSize(width: , height: contentView.bounds.width)
-        imageView.image = image?.resizeImage(targetWidth: contentView.bounds.width)
+        imageView.image = image
     }
-    
 }

@@ -19,7 +19,8 @@ struct BreedFeature {
 // MARK: - Breed
 struct Breed : Codable {
     let breedName, lifeSpan, breedDescription, temperament, origin : String
-    let dogFriendly, strangerFriendly, energyLevel, experimental, socialNeeds, adaptability, intelligence, childFriendly : Int
+    let dogFriendly, strangerFriendly, energyLevel, socialNeeds, adaptability, intelligence : Int
+    let childFriendly, natural, rare, experimental : Int
     let weight : Weight
     
     enum CodingKeys : String, CodingKey {
@@ -31,7 +32,8 @@ struct Breed : Codable {
         case energyLevel            = "energy_level"
         case socialNeeds            = "social_needs"
         case childFriendly          = "child_friendly"
-        case experimental, adaptability, intelligence, weight, temperament, origin
+        case origin                 = "country_code"
+        case adaptability, intelligence, weight, temperament, natural, rare, experimental
     }
 }
 
@@ -55,6 +57,9 @@ protocol BreedViewModelProtocol : class  {
     var breedFeatures : [BreedFeature] {get}
     var intelligence : String { get}
     var socialNeeds : String {get}
+    var natural : Int { get }
+    var rare : Int { get }
+    var experimental : Int { get }
         
     /// Get breed temperament for current index
     func temperament(for index: Int) -> String
@@ -66,10 +71,13 @@ class BreedViewModel : BreedViewModelProtocol {
     var averageWeight: String { breed.weight.metricWeight.replacingOccurrences(of: " ", with: "") }
     var breedName: String { breed.breedName }
     var breedDescription: String { breed.breedDescription }
-    var origin: String { breed.origin}
+    var origin: String { "\(Strings.origin) \(breed.origin)"}
     var strangerFriendly : String { "\(breed.strangerFriendly)/5" }
     var intelligence : String { "\(breed.intelligence)/5" }
     var socialNeeds : String { "\(breed.socialNeeds)/5" }
+    var natural : Int { breed.natural }
+    var rare : Int { breed.rare }
+    var experimental : Int { breed.experimental }
     
     var temperament: [String] {
         return breed.temperament.split(separator: ",").map({ String($0).replacingOccurrences(of: " ", with: "")})

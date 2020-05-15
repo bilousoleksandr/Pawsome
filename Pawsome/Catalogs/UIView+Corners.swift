@@ -21,7 +21,6 @@ extension UIView {
         layer.shadowOffset  = .zero
         layer.shadowRadius = 3
     }
-    
 }
 
 // MARK: - Blur View

@@ -9,11 +9,15 @@
 import UIKit
 
 extension UIColor {
-    static let blus                 = UIColor(red: 48 / 255.0, green: 64 / 255.0, blue: 87 / 255.0 , alpha: 1.0)
-    static let salmon               = UIColor(red: 228 / 255.0, green: 76 / 255.0, blue: 76 / 255.0, alpha: 1.0)
-    static let indianred            = UIColor(red: 196 / 255.0, green: 78 / 255.0, blue: 78 / 255.0, alpha: 1.0)
-    static let lightLightGrey       = UIColor(red: 147 / 255.0, green: 156 / 255.0, blue: 166 / 255.0, alpha: 1.0)
-    static let lightLightYellow     = UIColor(red: 237 / 255.0, green: 233 / 255.0, blue: 226 / 255.0, alpha: 1.0)
-    static let lightBlue            = UIColor(red: 236 / 255.0, green: 242 / 255.0, blue: 248 / 255.0, alpha: 1.0)
-    static let newWeight = UIColor(red: 251 / 255.0, green: 251 / 255.0, blue: 251 / 255.0, alpha: 1.0)
+    static let blus = UIColor.rgb(r: 48, g: 64, b: 87)
+    static let salmon = UIColor.rgb(r: 229, g: 76, b: 76)
+    static let indianred = UIColor.rgb(r: 196, g: 78, b: 78)
+    static let lightLightGrey = UIColor.rgb(r: 147, g: 156, b: 166)
+    static let lightLightYellow = UIColor.rgb(r: 237, g: 233, b: 226)
+    static let lightBlue = UIColor.rgb(r: 236, g: 242, b: 248)
+    static let newWeight = UIColor.rgb(r: 251, g: 251, b: 251)
+    
+    static func rgb(r: CGFloat, g: CGFloat, b: CGFloat) -> UIColor {
+        return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1)
+    }
 }
