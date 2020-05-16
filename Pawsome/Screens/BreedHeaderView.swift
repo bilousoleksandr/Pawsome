@@ -101,6 +101,6 @@ final class BreedHeaderView : UIView {
         originDetailsLabel.text = origin
         rareImageView.image = rare == 0 ? #imageLiteral(resourceName: "signs") : #imageLiteral(resourceName: "star")
         experimentalImageView.image = experimental == 0 ? #imageLiteral(resourceName: "animal-kingdom") : #imageLiteral(resourceName: "cat (5)")
-        naturalImageView.image = natural == 0 ? #imageLiteral(resourceName: "animals (2)") : #imageLiteral(resourceName: "paw")
+        naturalImageView.image = natural == 0 ? #imageLiteral(resourceName: "naturalCommon") : #imageLiteral(resourceName: "natural")
     }
 }

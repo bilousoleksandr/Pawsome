@@ -28,8 +28,8 @@ final class BreedShortInfoViewController : UIViewController {
                                 breedName: breedViewModel.breedName,
                                 description: breedViewModel.breedDescription,
                                 origin: breedViewModel.origin,
-                                intelligence: breedViewModel.intelligence,
-                                socialNeeds: breedViewModel.socialNeeds)
+                                weight: breedViewModel.averageWeight,
+                                lifespan: breedViewModel.averageLifeSpan)
     }
     
     private func setupView() {

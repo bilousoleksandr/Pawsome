@@ -29,6 +29,8 @@ final class Strings {
     static let kg = Strings.tr("Localizable", "kg")
     static let lifeSpan = Strings.tr("Localizable", "lifeSpan")
     static let years = Strings.tr("Localizable", "yr")
+    static let personalImages = Strings.tr("Localizable", "personalImages")
+    static let liked = Strings.tr("Localizable", "liked")
 }
 
 extension Strings {

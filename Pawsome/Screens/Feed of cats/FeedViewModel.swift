@@ -58,7 +58,7 @@ class FeedViewModel : FeedViewModelProtocol {
                         self.urls.append(imageUrl)
                     })
                 }, onFailure: {
-                    print("fail")
+                    // TODO: - Complition for failure
                 })
             }
         }

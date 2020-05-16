@@ -17,7 +17,7 @@ final class SavedImagesViewController : UICollectionViewController {
     }
     
     private lazy var segmentedController : SegmentedController = {
-        let view = SegmentedController(titles: ["Liked", "Saved"], selectedSection: 0) { [weak self] (value) in
+        let view = SegmentedController(titles: [Strings.liked, Strings.saved], selectedSection: 0) { [weak self] (value) in
             if let newImageSource = ImagesList(rawValue: value) {
                 self?.selectedImageSource = newImageSource
             }
@@ -30,7 +30,7 @@ final class SavedImagesViewController : UICollectionViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         super.init(collectionViewLayout: layout)
-        navigationController?.navigationBar.backgroundColor = UIColor.lightBlue
+        navigationItem.title = Strings.personalImages
     }
     
     required init?(coder: NSCoder) {

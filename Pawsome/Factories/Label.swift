@@ -21,8 +21,17 @@ struct Label {
     
     /// Title for breeds in collectionView
     static func makeBreedTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
-        Label.makeTitleLabel()
+        Label.makeTitleLabel(with: title)
             .font(UIFont.boldSystemFont(ofSize: 24))
+            .alignment(.center)
+    }
+    
+    /// Title for breeds in collectionView
+    static func makeBreedDetailsTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
+        Label.makeTitleLabel()
+            .color(textColor)
+            .text(title)
+            .font(UIFont.boldSystemFont(ofSize: 20))
             .alignment(.center)
     }
     

@@ -29,7 +29,7 @@ final class RootTabBarViewController : UITabBarController {
         let navControllers = [breedsVC, feedVC, savedVC].map { vc -> UINavigationController in
             let nc = UINavigationController(rootViewController: vc)
             nc.navigationBar.barTintColor = UIColor.lightBlue
-            nc.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.blus]
+            nc.navigationBar.titleTextAttributes = String.attributedString(UIFont.boldSystemFont(ofSize: 24), UIColor.blus, .center)
             return nc
         }
         setViewControllers(navControllers, animated: true)

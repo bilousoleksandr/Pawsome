@@ -37,14 +37,11 @@ final class BreedsCollectionViewController : UICollectionViewController {
     private func setupBreedModel () {
         breedViewModel.breedsDidLoad = { [weak self] in
             self?.collectionView.reloadData()
-            (0..<self!.breedViewModel.breedsCount).forEach {
-                print(self!.breedViewModel.breedDetails(for: $0))
-            }
         }
         breedViewModel.breeadsFailedLoad = {
+            //TODO:- dont dorget to handle network error -
             let alert = UIAlertController(title: "fdh", message: "fghfhg", preferredStyle: .actionSheet)
             self.present(alert, animated: true, completion: nil)
-            print("failed")
         }
         breedViewModel.fetchBreedsList()
     }

@@ -76,7 +76,7 @@ final class FullScrenViewModel : FullScrenViewModelProtocol {
                         self.urls.append(url)
                     })
                 }, onFailure: {
-                    print("fail")
+                    // TODO: - Complition for failure
                 })
             }
         }
