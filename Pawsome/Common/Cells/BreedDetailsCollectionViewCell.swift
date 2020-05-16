@@ -10,7 +10,7 @@ import UIKit
 
 final class BreedDetailsCollectionViewCell : UICollectionViewCell {
     private let iconView = UIImageView()
-    private let textLabel = Label.makeSubtitleLabel()
+    private let textLabel = Label.makeBreedDetailsLabel()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -47,7 +47,8 @@ final class BreedDetailsCollectionViewCell : UICollectionViewCell {
             iconView.heightAnchor.constraint(equalToConstant: 64),
             iconView.widthAnchor.constraint(equalToConstant: 64),
             
-            textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -StyleGuide.Spaces.single),
+            textLabel.topAnchor.constraint(equalTo: iconView.bottomAnchor, constant: space),
+            textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: space),
             textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: space),
             textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -space)
         ]
@@ -56,6 +57,6 @@ final class BreedDetailsCollectionViewCell : UICollectionViewCell {
     
     func configureCell(with name : String) {
         iconView.image = UIImage(named: name)
-        textLabel.text = name
+        textLabel.text = name.capitalizedFirst
     }
 }

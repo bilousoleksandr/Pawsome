@@ -8,17 +8,27 @@
 
 import UIKit
 
-final class SegmentedController : UIStackView {
+final class SegmentedController : UIView {
     private let titles : [String]
-    private let valueChangedAction : (String) -> Void
-    private let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 4))
+    private let valueChangedAction : (Int) -> Void
+    private let separatorView = UIView()
+    private let viewHeight : CGFloat = 60
+
+    private let stackView : UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .fill
+        stack.distribution = .fillProportionally
+        return stack
+    } ()
+    
     private var selectedSection : Int {
         didSet {
-            sectionSelectionHandler()
+            sectionSelectionHandler(selectedSection)
         }
     }
     
-    init(titles : [String], selectedSection : Int, valueChangedAction : @escaping (String) -> Void) {
+    init(titles : [String], selectedSection : Int, valueChangedAction : @escaping (Int) -> Void) {
         self.titles = titles
         self.selectedSection = selectedSection
         self.valueChangedAction = valueChangedAction
@@ -31,21 +41,35 @@ final class SegmentedController : UIStackView {
     }
     
     private func setupView() {
-        axis = .horizontal
-        alignment = .fill
-        distribution = .fillProportionally
+        addSubview(stackView)
         titles.forEach { title in
             let button = Button.makeButton(title)
             button.addTarget(self, action: #selector(segmentedButtonPressed(sender:)), for: .touchUpInside)
-            addArrangedSubview(button)
+            stackView.addArrangedSubview(button)
         }
+        setupConstraints()
+        
         separatorView.backgroundColor = UIColor.salmon
         addSubview(separatorView)
-        setupConstraints()
+        let separatoHeight : CGFloat = 4
+        separatorView.frame = CGRect(x: 0,
+                                     y: viewHeight - separatoHeight,
+                                     width: UIScreen.screenWidth() / CGFloat(titles.count),
+                                     height: separatoHeight)
     }
     
     private func setupConstraints() {
-        subviews.forEach({
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
+            stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0),
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 0),
+            stackView.heightAnchor.constraint(equalToConstant: viewHeight)
+        ])
+        
+        stackView.arrangedSubviews.forEach({
             $0.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 $0.widthAnchor.constraint(equalToConstant: UIScreen.screenWidth() / CGFloat(titles.count))
@@ -53,8 +77,14 @@ final class SegmentedController : UIStackView {
         })
     }
     
-    private func sectionSelectionHandler () {
-        
+    private func sectionSelectionHandler (_ index : Int) {
+        let zeroXPosition = UIScreen.screenWidth() / CGFloat(titles.count * 2)
+        let sectionSize = UIScreen.screenWidth() / CGFloat(titles.count)
+        let newXPosition = zeroXPosition + sectionSize * CGFloat(index)
+        let newCenter = CGPoint(x: newXPosition, y: separatorView.center.y)
+        UIView.animate(withDuration: 0.3) {
+            self.separatorView.center = newCenter
+        }
     }
 }
 
@@ -63,6 +93,6 @@ private extension SegmentedController {
     @objc func segmentedButtonPressed(sender: UIButton) {
         guard let buttonTitle = sender.titleLabel?.text, let senderIndex = titles.firstIndex(of: buttonTitle) else { fatalError() }
         selectedSection = senderIndex
-        valueChangedAction(buttonTitle)
+        valueChangedAction(senderIndex)
     }
 }

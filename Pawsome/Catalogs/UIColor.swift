@@ -16,6 +16,7 @@ extension UIColor {
     static let lightLightYellow = UIColor.rgb(r: 237, g: 233, b: 226)
     static let lightBlue = UIColor.rgb(r: 236, g: 242, b: 248)
     static let newWeight = UIColor.rgb(r: 251, g: 251, b: 251)
+    static let customGreen = UIColor.rgb(r: 9, g: 160, b: 143)
     
     static func rgb(r: CGFloat, g: CGFloat, b: CGFloat) -> UIColor {
         return UIColor(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1)

@@ -9,9 +9,10 @@
 import UIKit
 
 final class FeedCollectionViewController : UICollectionViewController {
-    private var feedViewModel = FeedViewModel(feed: Feed())
+    private var feedViewModel : FeedViewModel
     
-    init() {
+    init(feedViewModel : FeedViewModel = FeedViewModel()) {
+        self.feedViewModel = feedViewModel
         let flowLayout = CatFeedLayout()
         super.init(collectionViewLayout: flowLayout)
         navigationItem.title = Strings.feed
@@ -24,8 +25,10 @@ final class FeedCollectionViewController : UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        collectionView.prefetchDataSource = self
         collectionView.delegate = self
         collectionView.registerReusableCell(SingleViewFeedCell.self)
+        setStandartBackButton()
         
         feedViewModel.imagesListDidChange = { [weak self] (feedViewModel) in
             guard let self = self else { fatalError() }
@@ -35,7 +38,6 @@ final class FeedCollectionViewController : UICollectionViewController {
                 self.collectionView.insertSections(indexSet)
             }, completion: nil)
         }
-        
         collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longTapAction(sender:))))
     }
     
@@ -91,17 +93,20 @@ extension FeedCollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewFlowlayoutDelegate -
-extension FeedCollectionViewController : UICollectionViewDelegateFlowLayout {
-    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let maxSection = collectionView.numberOfSections
-        if indexPath.row == 1 && indexPath.section == maxSection - 1,
-            let previousCell = collectionView.cellForItem(at: IndexPath(row: indexPath.row - 1, section: indexPath.section)),
-            collectionView.visibleCells.contains(previousCell) {
-                feedViewModel.showNewImages()
+// MARK: -
+extension FeedCollectionViewController : UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        let maxSections = collectionView.numberOfSections
+        let targetIndexPath = IndexPath(row: 0, section: maxSections - 3)
+        let cells = collectionView.visibleCells.map({ collectionView.indexPath(for: $0) }).compactMap({ $0 })
+        if feedViewModel.canPrefetchMoreItems, cells.contains(targetIndexPath) {
+            feedViewModel.showNewImages()
         }
     }
-    
+}
+
+// MARK: - UICollectionViewFlowlayoutDelegate -
+extension FeedCollectionViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {

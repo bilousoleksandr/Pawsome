@@ -10,6 +10,7 @@ import UIKit
 
 final class FullScreenViewController : UITableViewController {
     private var fullScreenViewModel : FullScrenViewModel
+    private var visibleCellIndexPath : IndexPath?
     
     init(fullScreenViewModel : FullScrenViewModel) {
         self.fullScreenViewModel = fullScreenViewModel
@@ -23,20 +24,17 @@ final class FullScreenViewController : UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.prefetchDataSource = self
         tableView.registerReusableCell(FullScreenTableViewCell.self)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "<",
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(backButtonPressed(sender:)))
         
         fullScreenViewModel.imagesListDidChange = { [weak self] _ in
             guard let self = self else { fatalError() }
             let currentIndex = self.tableView.numberOfRows(inSection: 0)
             let newIndexes = self.fullScreenViewModel.itemsCount - 1
-            if currentIndex < newIndexes {
+            if currentIndex < newIndexes  {
                 let indexes = Array(currentIndex...newIndexes).map({ IndexPath(row: $0, section: 0)})
                 self.tableView.performBatchUpdates({
-                    self.tableView.insertRows(at: indexes, with: .none)
+                    self.tableView.insertRows(at: indexes, with: .fade)
                 }, completion: nil)
             }
         }
@@ -65,16 +63,6 @@ final class FullScreenViewController : UITableViewController {
     }
 }
 
-// MARK: - UITableViewDelegate
-extension FullScreenViewController {
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print(indexPath)
-        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 2 {
-            fullScreenViewModel.showNewImages()
-        }
-    }
-}
-
 // MARK: - UITableViewDataSource
 extension FullScreenViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -97,6 +85,16 @@ extension FullScreenViewController {
         }
         itemCell.selectionStyle = .none
         return itemCell
+    }
+}
+
+extension FullScreenViewController : UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        if let cell = tableView.visibleCells.last,
+            let lastIndexPath = tableView.indexPath(for: cell),
+            lastIndexPath.row == tableView.numberOfRows(inSection: 0) - 1 {
+            fullScreenViewModel.showNewImages()
+        }
     }
 }
 

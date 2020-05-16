@@ -11,6 +11,6 @@ import UIKit
 // MARK: - Breed Image
 extension UIImage {
     static func catImage(for breed: String) -> UIImage {
-        return UIImage(named: breed) ?? #imageLiteral(resourceName: "s1200")
+        return UIImage(named: "\(breed)_back") ?? #imageLiteral(resourceName: "s1200")
     }
 }

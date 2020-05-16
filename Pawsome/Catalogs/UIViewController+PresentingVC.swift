@@ -31,6 +31,7 @@ extension UIViewController {
         imageView.centerYAnchor.constraint(equalTo: vc.view.centerYAnchor).isActive = true
         imageView.centerXAnchor.constraint(equalTo: vc.view.centerXAnchor).isActive = true
         imageView.roundCorners(radius: StyleGuide.CornersRadius.largeView)
+        imageView.makeRounded(radius: StyleGuide.CornersRadius.largeView)
         imageView.makeShadow()
         showFullScreen(vc)
     }
@@ -40,5 +41,13 @@ extension UIViewController {
 extension UIViewController {
     @objc func screenDidTap(sender: UITapGestureRecognizer) {
         dismiss(animated: true, completion: nil)
+    }
+}
+
+// MARK: - BackButtons
+extension UIViewController {
+    func setStandartBackButton() {
+        navigationItem.backBarButtonItem = BarButtonItem.makeBackButton()
+        navigationItem.backBarButtonItem?.tintColor = UIColor.blus
     }
 }

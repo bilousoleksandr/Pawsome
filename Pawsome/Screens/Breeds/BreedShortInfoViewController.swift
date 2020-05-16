@@ -9,10 +9,10 @@
 import UIKit
 
 final class BreedShortInfoViewController : UIViewController {
-    private let breedViewModel : BreedViewModel
+    private let breedViewModel : SingleBreeViewModel
     private let shortInfoView = BreedShortInfoView()
     
-    init(breedMViewModel : BreedViewModel) {
+    init(breedMViewModel : SingleBreeViewModel) {
         self.breedViewModel = breedMViewModel
         super.init(nibName: nil, bundle : nil)
     }

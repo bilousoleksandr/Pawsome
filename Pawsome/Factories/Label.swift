@@ -23,6 +23,7 @@ struct Label {
     static func makeBreedTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         Label.makeTitleLabel()
             .font(UIFont.boldSystemFont(ofSize: 24))
+            .alignment(.center)
     }
     
     static func makeSubtitleLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
@@ -30,6 +31,16 @@ struct Label {
             .color(textColor)
             .font(UIFont.systemFont(ofSize: 18))
             .text(title)
+    }
+    
+    /// Subtitle label with 2 lines and word wrapping style
+    static func makeBreedDetailsLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
+        UILabel()
+            .color(textColor)
+            .font(UIFont.systemFont(ofSize: 16))
+            .text(title)
+            .lines(2)
+            .lineBreak(.byWordWrapping)
     }
     
     /// Multiline title for breed description
@@ -71,6 +82,11 @@ extension UILabel {
     
     func lineBreak(_ lb: NSLineBreakMode) -> UILabel {
         lineBreakMode = lb
+        return self
+    }
+    
+    func adjustFontSize(_ adjust : Bool = true) -> UILabel {
+        adjustsFontSizeToFitWidth = adjust
         return self
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 final class SingleBreedViewController : UIViewController {
-    private let breedViewModel : BreedViewModel
+    private let breedViewModel : SingleBreeViewModel
     
     private lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -30,7 +30,7 @@ final class SingleBreedViewController : UIViewController {
         return view
     } ()
     
-    init(breedViewModel : BreedViewModel) {
+    init(breedViewModel : SingleBreeViewModel) {
         self.breedViewModel = breedViewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = breedViewModel.breedName

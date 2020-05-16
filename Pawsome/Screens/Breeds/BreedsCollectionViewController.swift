@@ -9,9 +9,10 @@
 import UIKit
 
 final class BreedsCollectionViewController : UICollectionViewController {
-    private var allBreeds : [Breed] = []
+    private let breedViewModel : BreedViewModel
     
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
+    init(collectionViewLayout layout: UICollectionViewLayout, breedViewModel : BreedViewModel = BreedViewModel()) {
+        self.breedViewModel = breedViewModel
         super.init(collectionViewLayout: layout)
         navigationItem.title = Strings.breeds
     }
@@ -27,22 +28,31 @@ final class BreedsCollectionViewController : UICollectionViewController {
         collectionView.delegate = self
         collectionView.contentInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         collectionView.registerReusableCell(SingleBreedCollectionViewCell.self)
-        
+        setupBreedModel()
+        setStandartBackButton()
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapPressed(sender:)))
         collectionView.addGestureRecognizer(longTapGesture)
-        
-        let network = NetworkServiceImplementation()
-        network.allBreeds(onSuccess: { [weak self] (breeds) in
-            guard let self = self else { fatalError() }
-            self.allBreeds = breeds
-            self.collectionView.reloadData()
-        })
+    }
+    
+    private func setupBreedModel () {
+        breedViewModel.breedsDidLoad = { [weak self] in
+            self?.collectionView.reloadData()
+            (0..<self!.breedViewModel.breedsCount).forEach {
+                print(self!.breedViewModel.breedDetails(for: $0))
+            }
+        }
+        breedViewModel.breeadsFailedLoad = {
+            let alert = UIAlertController(title: "fdh", message: "fghfhg", preferredStyle: .actionSheet)
+            self.present(alert, animated: true, completion: nil)
+            print("failed")
+        }
+        breedViewModel.fetchBreedsList()
     }
     
     private func longPressStartedHandler (at point : CGPoint) {
         if let indexPath = collectionView.indexPathForItem(at: point) {
-            let breedAtIndex = BreedViewModel(breed: allBreeds[indexPath.row])
-            let vc = BreedShortInfoViewController(breedMViewModel: breedAtIndex)
+            let singleBreed = SingleBreeViewModel(breed: breedViewModel.singleBreed(for: indexPath.row))
+            let vc = BreedShortInfoViewController(breedMViewModel: singleBreed)
             showFullScreen(vc)
         }
     }
@@ -71,12 +81,13 @@ extension BreedsCollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return allBreeds.count
+        return breedViewModel.breedsCount
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(SingleBreedCollectionViewCell.self, for: indexPath) else { fatalError() }
-        cell.configure(with: allBreeds[indexPath.row].breedName, and: allBreeds[indexPath.row].origin)
+        let source = breedViewModel.breedDetails(for: indexPath.row)
+        cell.configure(with: source.name, and: source.origin)
         return cell
     }
 }
@@ -88,7 +99,7 @@ extension BreedsCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: smallItemSize, height: smallItemSize * 1.5)
+        return CGSize(width: smallItemSize, height: smallItemSize * 1.3)
                                                                                                                               
     }
     
@@ -101,7 +112,7 @@ extension BreedsCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = SingleBreedViewController(breedViewModel: BreedViewModel(breed: allBreeds[indexPath.row]))
+        let vc = SingleBreedViewController(breedViewModel: SingleBreeViewModel(breed: breedViewModel.singleBreed(for: indexPath.row)))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

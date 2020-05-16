@@ -26,7 +26,12 @@ final class RootTabBarViewController : UITabBarController {
         let savedVC = SavedImagesViewController()
         savedVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "savedImagesTabBar"), selectedImage: nil)
         
-        let navControllers = [breedsVC, feedVC, savedVC].map { UINavigationController(rootViewController: $0) }
+        let navControllers = [breedsVC, feedVC, savedVC].map { vc -> UINavigationController in
+            let nc = UINavigationController(rootViewController: vc)
+            nc.navigationBar.barTintColor = UIColor.lightBlue
+            nc.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.blus]
+            return nc
+        }
         setViewControllers(navControllers, animated: true)
     }
 }

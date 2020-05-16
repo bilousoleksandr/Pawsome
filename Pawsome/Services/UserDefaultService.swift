@@ -41,10 +41,8 @@ protocol UserDefaultServiceHolder {
 protocol UserDefaultService {
     /// Add url to list or remove it if already exist
     func updateSavedList (_ savedImage : String)
-    
     /// Return model with all saved amd liked images url
     func getUserImages () -> UserImagesModel?
-    
     /// Add likedImage to list or remove it if already exist
     func updateLikedImages (_ savedImage : String)
 }
@@ -93,7 +91,18 @@ final class UserDefaultServiceImpementation : UserDefaultService {
     }
     
     func updateLikedImages (_ savedImage : String) {
-        
+        var newValue : UserImagesModel
+        if let savedImages = getUserImages() {
+            newValue = savedImages
+            if let firstIndex = newValue.likedImages.firstIndex(of: savedImage) {
+                newValue.likedImages.remove(at: firstIndex)
+            } else {
+                newValue.likedImages.append(savedImage)
+            }
+        } else {
+            newValue = UserImagesModel(savedImages: [String](), likedImages: [savedImage])
+        }
+        saveUpdatedValue(newValue)
     }
 }
 

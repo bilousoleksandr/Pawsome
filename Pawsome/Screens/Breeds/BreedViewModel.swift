@@ -48,59 +48,50 @@ struct Weight : Codable {
 
 // MARK: - BreedViewModelProtocol
 protocol BreedViewModelProtocol : class  {
-    var averageLifeSpan : String { get }
-    var averageWeight : String { get }
-    var breedName : String { get }
-    var breedDescription : String { get }
-    var origin : String { get }
-    var temperament : [String] { get }
-    var breedFeatures : [BreedFeature] {get}
-    var intelligence : String { get}
-    var socialNeeds : String {get}
-    var natural : Int { get }
-    var rare : Int { get }
-    var experimental : Int { get }
-        
-    /// Get breed temperament for current index
-    func temperament(for index: Int) -> String
+    /// Callback for successfull data fetching and serialization
+    var breedsDidLoad : (() -> Void)? { get set }
+    /// Call clousure if loading did failed or something go wrong during data serialization
+    var breeadsFailedLoad : (() -> Void)? { get set }
+    /// Total amount of loaded breeds
+    var breedsCount : Int { get }
+    /// Send request to server and get actual breeds list
+    func fetchBreedsList()
+    /// Return breed name and origin for given index
+    func breedDetails(for index : Int) -> (name : String, origin : String)
+    /// Return breed for given index
+    func singleBreed(for index : Int) -> Breed
 }
 
 class BreedViewModel : BreedViewModelProtocol {
-    private let breed : Breed
-    var averageLifeSpan: String { breed.lifeSpan.replacingOccurrences(of: " ", with: "") }
-    var averageWeight: String { breed.weight.metricWeight.replacingOccurrences(of: " ", with: "") }
-    var breedName: String { breed.breedName }
-    var breedDescription: String { breed.breedDescription }
-    var origin: String { "\(Strings.origin) \(breed.origin)"}
-    var strangerFriendly : String { "\(breed.strangerFriendly)/5" }
-    var intelligence : String { "\(breed.intelligence)/5" }
-    var socialNeeds : String { "\(breed.socialNeeds)/5" }
-    var natural : Int { breed.natural }
-    var rare : Int { breed.rare }
-    var experimental : Int { breed.experimental }
+    private let networkService : NetworkService
+    private var breeds : [Breed] = []
+    var breedsDidLoad : (() -> Void)?
+    var breeadsFailedLoad : (() -> Void)?
+    var breedsCount : Int { breeds.count }
     
-    var temperament: [String] {
-        return breed.temperament.split(separator: ",").map({ String($0).replacingOccurrences(of: " ", with: "")})
+    init (networkService : NetworkService = AppDelegate.shared.context.networkService) {
+        self.networkService = networkService
     }
     
-    var breedFeatures : [BreedFeature] {
-        var features : [BreedFeature] = []
-        features.append(BreedFeature(featureName: Strings.strangerFriendly, index: breed.strangerFriendly, commonImage: #imageLiteral(resourceName: "strangerFriendlyCommon"), highlightedImage: #imageLiteral(resourceName: "strangerFriendly")))
-        features.append(BreedFeature(featureName: Strings.socialNeeds, index: breed.socialNeeds, commonImage: #imageLiteral(resourceName: "socialNeedsCommon"), highlightedImage: #imageLiteral(resourceName: "socialNeeds")))
-        features.append(BreedFeature(featureName: Strings.intelligence, index: breed.intelligence, commonImage: #imageLiteral(resourceName: "brainCommon"), highlightedImage: #imageLiteral(resourceName: "brain")))
-        features.append(BreedFeature(featureName: Strings.energyLevel, index: breed.energyLevel, commonImage: #imageLiteral(resourceName: "energyCommon"), highlightedImage: #imageLiteral(resourceName: "energy")))
-        features.append(BreedFeature(featureName: Strings.dogFriendly, index: breed.dogFriendly, commonImage: #imageLiteral(resourceName: "dogFriendlyCommon"), highlightedImage: #imageLiteral(resourceName: "dogFriendly")))
-        features.append(BreedFeature(featureName: Strings.childFriendly, index: breed.childFriendly, commonImage: #imageLiteral(resourceName: "childCommon"), highlightedImage: #imageLiteral(resourceName: "child")))
-        features.append(BreedFeature(featureName: Strings.adaptability, index: breed.adaptability, commonImage: #imageLiteral(resourceName: "adaptabilityCommon"), highlightedImage: #imageLiteral(resourceName: "adaptability")))
-        print(breed.experimental)
-        return features
+    func fetchBreedsList() {
+        networkService.fetchAllBreeds(onSuccess: { [weak self] (breeds) in
+            self?.breeds = breeds
+            if let callbackAction = self?.breedsDidLoad {
+                callbackAction()
+            }
+        }, onFailure: { [weak self] in
+            if let callbackAction = self?.breeadsFailedLoad {
+                callbackAction()
+            }
+        })
     }
     
-    init (breed: Breed) {
-        self.breed = breed
+    func breedDetails(for index : Int) -> (name : String, origin : String) {
+        let sourceBreed = breeds[index]
+        return (name: sourceBreed.breedName, origin: sourceBreed.origin)
     }
     
-    func temperament(for index: Int) -> String {
-        return temperament[index]
+    func singleBreed(for index : Int) -> Breed {
+        breeds[index]
     }
 }

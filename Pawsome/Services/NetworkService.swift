@@ -27,13 +27,13 @@ protocol NetworkServiceHolder {
 
 protocol NetworkService {
     /// Dowload list of breeds and its description from server
-//    func allBreeds()
+    func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void)
     
     /// Return array of image urls from server with given amount of elements
     func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ())
     
     /// Load data from given url and return UIImage and Data via callback clousure
-    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> ())
+    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void)
     
     /// Post users like to server with unique UUID
     func postLike(_ value : Int, _ imageID : String)
@@ -47,10 +47,11 @@ final class NetworkServiceImplementation : NetworkService {
         self.urlSession = urlSession
     }
     
-    func allBreeds(onSuccess: @escaping ([Breed]) -> ()) {
+    func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void) {
         let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.breedsUrl)) { (data, response, error) in
             guard let allData = data, error == nil else {
-                fatalError()
+                onFailure()
+                return
             }
             do {
                 let breeds = try JSONDecoder().decode([Breed].self, from: allData)
@@ -58,7 +59,7 @@ final class NetworkServiceImplementation : NetworkService {
                     onSuccess(breeds)
                 }
             } catch {
-                print(error.localizedDescription)
+                onFailure()
             }
         }
         dataTask.resume()
@@ -82,12 +83,13 @@ final class NetworkServiceImplementation : NetworkService {
         dataTask.resume()
     }
     
-    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> ()) {
-        guard let imageUrl = URL(string: url) else {
-            fatalError()
-        }
+    func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void) {
+        guard let imageUrl = URL(string: url) else { return }
         let dataTask = urlSession.dataTask(with: imageUrl, completionHandler: { (data, response, error) in
-            guard let data = data, error == nil else { return }
+            guard let data = data, error == nil else {
+                onFailure()
+                return
+            }
             DispatchQueue.main.async {
                 onSuccess(UIImage(data: data), data)
             }
@@ -105,12 +107,7 @@ final class NetworkServiceImplementation : NetworkService {
                                       data: postData,
                                       header: Constants.postHeader)
             let task = urlSession.dataTask(with: request) { (_, response, error) in
-                guard error == nil else {
-                    print(error)
-                    return
-                }
-                let httpResponse = response as? HTTPURLResponse
-                print(httpResponse)
+                guard error == nil else { return }
             }
             task.resume()
         } catch {

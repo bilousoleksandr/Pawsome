@@ -81,7 +81,7 @@ final class BreedScrollView : UIScrollView {
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -StyleGuide.Spaces.double),
             stackView.widthAnchor.constraint(equalToConstant: screenWidth),
             
-            collectionView.heightAnchor.constraint(equalToConstant: 110)
+            collectionView.heightAnchor.constraint(equalToConstant: 120)
         ]
         NSLayoutConstraint.activate(constrains)
     }
@@ -141,6 +141,7 @@ final class BreedScrollView : UIScrollView {
                             weight : String, lifeSpan : String,
                             breedText: String, breedFeatures : [BreedFeature],
                             rare : Int, experimental : Int, natural : Int) {
+        
         headerView.configure(name: name, origin: origin, friendlyText: friendlyText, rare: rare, experimental: experimental, natural: natural)
         lifeSpanView.configure(value: weight, details: .weight)
         weightView.configure(value: lifeSpan, details: .lifeSpan)
