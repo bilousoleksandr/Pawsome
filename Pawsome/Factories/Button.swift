@@ -16,10 +16,11 @@ struct Button {
         return button
     }
     
-    static func makeButton(_ title : String? = nil, backgroundColor : UIColor? = UIColor.lightBlue) -> UIButton {
+    static func makeButton(_ title : String, backgroundColor : UIColor? = UIColor.lightBlue) -> UIButton {
         let button = UIButton(type: .custom)
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(UIColor.blus, for: .normal)
+        button.setAttributedTitle(NSAttributedString(string: title,
+                                                     attributes: String.attributedString(UIFont.systemFont(ofSize: 18), UIColor.blus, .center)),for: .normal)
+        button.setAttributedTitle(NSAttributedString(string: title, attributes: String.attributedString(UIFont.boldSystemFont(ofSize: 18), UIColor.salmon, .center)), for: .selected)
         button.backgroundColor = backgroundColor
         return button
     }

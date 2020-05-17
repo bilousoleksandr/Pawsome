@@ -28,13 +28,10 @@ protocol NetworkServiceHolder {
 protocol NetworkService {
     /// Dowload list of breeds and its description from server
     func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void)
-    
     /// Return array of image urls from server with given amount of elements
     func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ())
-    
     /// Load data from given url and return UIImage and Data via callback clousure
     func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void)
-    
     /// Post users like to server with unique UUID
     func postLike(_ value : Int, _ imageID : String)
 }

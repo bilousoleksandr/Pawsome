@@ -31,6 +31,7 @@ final class Strings {
     static let years = Strings.tr("Localizable", "yr")
     static let personalImages = Strings.tr("Localizable", "personalImages")
     static let liked = Strings.tr("Localizable", "liked")
+    static let singleImage = Strings.tr("Localizable", "singleImage")
 }
 
 extension Strings {

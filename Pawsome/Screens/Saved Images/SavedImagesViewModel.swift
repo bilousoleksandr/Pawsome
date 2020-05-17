@@ -22,6 +22,8 @@ protocol SavedImagesViewModelProtocol {
     var urlsArrayDidUpdate : ((SavedImagesViewModelProtocol) -> Void)? { get set }
     /// Load image from disk and return value if it exist
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void)
+    ///URL for item at specific path
+    func urlForItem(at index : Int, for list : ImagesList) -> String
 }
 
 final class SavedImagesViewModel : SavedImagesViewModelProtocol {
@@ -69,16 +71,24 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
         }
     }
     
-    func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void) {
+    private func sourceList(_ list : ImagesList) -> [String] {
         let source : [String]
         switch list {
-        case .liked:
-            source = likedImageUrls
-        case .saved:
-            source = savedImageUrls
+        case .liked: source = likedImageUrls
+        case .saved: source = savedImageUrls
         }
+        return source
+    }
+    
+    func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void) {
+        let source = sourceList(list)
         fileManagerService.fetchImage(at: source[index]) { (image) in
             onSuccess(image)
         }
+    }
+    
+    func urlForItem(at index : Int, for list : ImagesList) -> String {
+        let source = sourceList(list)
+        return source[index]
     }
 }

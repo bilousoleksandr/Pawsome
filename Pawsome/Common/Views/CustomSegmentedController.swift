@@ -10,6 +10,7 @@ import UIKit
 
 final class SegmentedController : UIView {
     private let titles : [String]
+    private var buttons : [UIButton]
     private let valueChangedAction : (Int) -> Void
     private let separatorView = UIView()
     private let viewHeight : CGFloat = 60
@@ -32,6 +33,7 @@ final class SegmentedController : UIView {
         self.titles = titles
         self.selectedSection = selectedSection
         self.valueChangedAction = valueChangedAction
+        self.buttons = [UIButton]()
         super.init(frame: .zero)
         setupView()
     }
@@ -46,6 +48,7 @@ final class SegmentedController : UIView {
             let button = Button.makeButton(title)
             button.addTarget(self, action: #selector(segmentedButtonPressed(sender:)), for: .touchUpInside)
             stackView.addArrangedSubview(button)
+            buttons.append(button)
         }
         setupConstraints()
         
@@ -56,6 +59,7 @@ final class SegmentedController : UIView {
                                      y: viewHeight - separatoHeight,
                                      width: UIScreen.screenWidth() / CGFloat(titles.count),
                                      height: separatoHeight)
+        segmentedButtonPressed(sender: buttons[selectedSection])
     }
     
     private func setupConstraints() {
@@ -92,6 +96,8 @@ final class SegmentedController : UIView {
 private extension SegmentedController {
     @objc func segmentedButtonPressed(sender: UIButton) {
         guard let buttonTitle = sender.titleLabel?.text, let senderIndex = titles.firstIndex(of: buttonTitle) else { fatalError() }
+        buttons.forEach({ $0.isSelected = false })
+        sender.isSelected = true
         selectedSection = senderIndex
         valueChangedAction(senderIndex)
     }

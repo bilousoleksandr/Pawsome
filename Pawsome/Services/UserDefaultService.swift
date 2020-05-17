@@ -26,7 +26,7 @@ struct Serializer {
         let decodedValue : UserImagesModel = try decoder.decode(UserImagesModel.self, from: data)
         return decodedValue
     }
-    
+    /// Create binary data from given model
     static func convertUserImages(userImages: UserImagesModel) throws -> Data {
         let encoder = JSONEncoder()
         let encodedValue : Data = try encoder.encode(userImages)

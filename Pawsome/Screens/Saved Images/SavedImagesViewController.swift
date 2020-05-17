@@ -49,6 +49,7 @@ final class SavedImagesViewController : UICollectionViewController {
     
     private func setupView() {
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        setStandartBackButton()
         collectionView.delegate = self
         collectionView.registerReusableCell(SingleViewFeedCell.self)
         collectionView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
@@ -104,5 +105,11 @@ extension SavedImagesViewController : UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 3
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let viewModel = SingleImageViewModel(imageUrl: savedImagesModel.urlForItem(at: indexPath.row, for: selectedImageSource))
+        let vc = SingleImageViewController(sinleImageViewModel: viewModel)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }

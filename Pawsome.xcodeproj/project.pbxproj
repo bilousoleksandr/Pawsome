@@ -19,6 +19,8 @@
 		E82667F0245C5FBC00CBAEA7 /* UIImage+Resizing.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82667EF245C5FBC00CBAEA7 /* UIImage+Resizing.swift */; };
 		E82B6CDA246D692400D6F38D /* UIView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82B6CD9246D692400D6F38D /* UIView+Animation.swift */; };
 		E82B6CE0246D955700D6F38D /* CustomSegmentedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82B6CDF246D955700D6F38D /* CustomSegmentedController.swift */; };
+		E84B66FA2470016E00BAB239 /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84B66F92470016E00BAB239 /* SingleImageViewController.swift */; };
+		E84B66FC2470026600BAB239 /* SingleImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84B66FB2470026600BAB239 /* SingleImageViewModel.swift */; };
 		E84BE34A246448FF00A8E1E9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE349246448FF00A8E1E9 /* AppContext.swift */; };
 		E84BE34C24644A6000A8E1E9 /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */; };
 		E84BE34F2464573400A8E1E9 /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */; };
@@ -116,6 +118,8 @@
 		E82667EF245C5FBC00CBAEA7 /* UIImage+Resizing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resizing.swift"; sourceTree = "<group>"; };
 		E82B6CD9246D692400D6F38D /* UIView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animation.swift"; sourceTree = "<group>"; };
 		E82B6CDF246D955700D6F38D /* CustomSegmentedController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedController.swift; sourceTree = "<group>"; };
+		E84B66F92470016E00BAB239 /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
+		E84B66FB2470026600BAB239 /* SingleImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewModel.swift; sourceTree = "<group>"; };
 		E84BE349246448FF00A8E1E9 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
@@ -227,9 +231,9 @@
 			isa = PBXGroup;
 			children = (
 				E81ECDE124603F4800E9A63E /* BreedViewModel.swift */,
+				E8542EF8245B1BB9008D56B0 /* BreedsCollectionViewController.swift */,
 				E893793B246EC46400AB87A7 /* SingleBreedViewModel.swift */,
 				E8542EF1245B1556008D56B0 /* SingleBreedViewController.swift */,
-				E8542EF8245B1BB9008D56B0 /* BreedsCollectionViewController.swift */,
 				E8F1DD7724618E71002CCAF3 /* BreedShortInfoViewController.swift */,
 			);
 			path = Breeds;
@@ -272,6 +276,8 @@
 				E8542EFC245B1D7D008D56B0 /* RootTabBarViewController.swift */,
 				E81ECDE52460441400E9A63E /* Feed of cats */,
 				E8937941246EE5A400AB87A7 /* Saved Images */,
+				E84B66F92470016E00BAB239 /* SingleImageViewController.swift */,
+				E84B66FB2470026600BAB239 /* SingleImageViewModel.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -554,6 +560,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8BC3B822465C06100C839D4 /* Button.swift in Sources */,
+				E84B66FA2470016E00BAB239 /* SingleImageViewController.swift in Sources */,
 				E8BC3B802465B3C200C839D4 /* UserDefaultService.swift in Sources */,
 				E8937940246EDB6100AB87A7 /* String.swift in Sources */,
 				E812315C245D7DDC00040C2B /* CatFeedlayout.swift in Sources */,
@@ -576,6 +583,7 @@
 				E82667EC245C4B7C00CBAEA7 /* Label.swift in Sources */,
 				E85710372466CA2F00FEB4DD /* UIDevice+UUID.swift in Sources */,
 				E8B42F7D2465994400FBA2C8 /* BreedShortInfoView.swift in Sources */,
+				E84B66FC2470026600BAB239 /* SingleImageViewModel.swift in Sources */,
 				E8F1DD7A2461A813002CCAF3 /* UIViewController+PresentingVC.swift in Sources */,
 				E82667E8245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift in Sources */,
 				E8BC3B842465C18B00C839D4 /* SavedImagesViewModel.swift in Sources */,

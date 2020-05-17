@@ -15,10 +15,8 @@ protocol FileManagerServiceHolder {
 protocol FileManagerService {
     /// Save image data with given url on background queue
     func saveImage(_ data: Data, at path : String, onSuccess: @escaping () -> Void)
-    
     /// Fetch data for given URL in background queue and return result on main thread
     func fetchImage(at path : String, onSuccess: @escaping (UIImage?) -> Void)
-    
     /// Delete all given data from disk
     func deleteAllItems(at Urls: [String])
 }
