@@ -32,7 +32,6 @@ final class FeedCollectionViewController : UICollectionViewController {
         
         feedViewModel.imagesListDidChange = { [weak self] (feedViewModel) in
             guard let self = self else { fatalError() }
-            print(self.collectionView.numberOfSections)
             self.collectionView.performBatchUpdates({
                 let indexSet = IndexSet(self.collectionView.numberOfSections..<(self.feedViewModel.urls.count / 9 * 2))
                 self.collectionView.insertSections(indexSet)
