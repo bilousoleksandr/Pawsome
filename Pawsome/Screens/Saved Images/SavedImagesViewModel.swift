@@ -23,20 +23,20 @@ protocol SavedImagesViewModelProtocol {
     /// Load image from disk and return value if it exist
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void)
     ///URL for item at specific path
-    func urlForItem(at index : Int, for list : ImagesList) -> String
+    func urlForItem(at index : Int, for list : ImagesList) -> Image
 }
 
 final class SavedImagesViewModel : SavedImagesViewModelProtocol {
     private let userDefaultsService : UserDefaultService
     private let fileManagerService : FileManagerService
     var urlsArrayDidUpdate : ((SavedImagesViewModelProtocol) -> Void)?
-    private var savedImageUrls : [String] = [] {
+    private var savedImageUrls : [Image] = [] {
         didSet {
             callback()
         }
     }
     
-    private var likedImageUrls : [String] = [] {
+    private var likedImageUrls : [Image] = [] {
         didSet {
             callback()
         }
@@ -71,8 +71,8 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
         }
     }
     
-    private func sourceList(_ list : ImagesList) -> [String] {
-        let source : [String]
+    private func sourceList(_ list : ImagesList) -> [Image] {
+        let source : [Image]
         switch list {
         case .liked: source = likedImageUrls
         case .saved: source = savedImageUrls
@@ -82,12 +82,14 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
     
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void) {
         let source = sourceList(list)
-        fileManagerService.fetchImage(at: source[index]) { (image) in
+        fileManagerService.fetchImage(at: source[index].imageUrl, onSuccess: { (image) in
             onSuccess(image)
-        }
+        }, onFailure:  {
+            print("Error occured")
+        })
     }
     
-    func urlForItem(at index : Int, for list : ImagesList) -> String {
+    func urlForItem(at index : Int, for list : ImagesList) -> Image {
         let source = sourceList(list)
         return source[index]
     }

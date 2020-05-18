@@ -40,6 +40,7 @@ struct Label {
             .color(textColor)
             .font(UIFont.systemFont(ofSize: 18))
             .text(title)
+            .adjustFontSize()
     }
     
     /// Subtitle label with 2 lines and word wrapping style

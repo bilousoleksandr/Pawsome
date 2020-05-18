@@ -15,6 +15,13 @@ extension UIView {
         layer.maskedCorners = cornersMask
     }
     
+    func makeBorders (radius: CGFloat = 0, width : CGFloat, color: UIColor = UIColor.blus) {
+        roundCorners(radius: radius)
+        layer.borderColor = color.cgColor
+        layer.borderWidth = width
+        clipsToBounds = true
+    }
+    
     func makeShadow () {
         layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         layer.shadowOpacity = 1

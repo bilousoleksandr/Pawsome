@@ -29,15 +29,16 @@ protocol NetworkService {
     /// Dowload list of breeds and its description from server
     func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void)
     /// Return array of image urls from server with given amount of elements
-    func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ())
+    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> ())
     /// Load data from given url and return UIImage and Data via callback clousure
     func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void)
     /// Post users like to server with unique UUID
     func postLike(_ value : Int, _ imageID : String)
+    /// Return actual image's categories
+    func fetchImageCategories(onSuccess : @escaping ([Category]) -> (), onFailure : @escaping () -> Void)
 }
 
 final class NetworkServiceImplementation : NetworkService {
-    
     private let urlSession : URLSession
     
     init (urlSession : URLSession = URLSession.shared) {
@@ -62,8 +63,8 @@ final class NetworkServiceImplementation : NetworkService {
         dataTask.resume()
     }
     
-    func getRandomCatImages(imgCount : Int, onSuccess: @escaping ([String]) -> ()) {
-        let urlName = "images/search?limit=\(imgCount)&order=\(ImagesOrder.random)&size=small"
+    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> ()) {
+        let urlName = category == nil ? "images/search?limit=\(imgCount)&order=\(ImagesOrder.random)&size=small" : "images/search?category_ids=\(category ?? 0)&limit=\(imgCount)&order=\(ImagesOrder.random)&size=small"
         let dataTask = urlSession.dataTask(with: makeRequest(with: urlName)) { (data, response, error) in
             guard let allData = data, error == nil else {
                 return
@@ -71,7 +72,7 @@ final class NetworkServiceImplementation : NetworkService {
             do {
                 let images = try JSONDecoder().decode([Image].self, from: allData)
                 DispatchQueue.main.async {
-                    onSuccess(images.map({ $0.imageUrl}))
+                    onSuccess(images)
                 }
             } catch {
                 print(error.localizedDescription)
@@ -96,7 +97,7 @@ final class NetworkServiceImplementation : NetworkService {
     
     func postLike(_ value : Int, _ imageID : String) {
         do {
-            let postData = try JSONEncoder().encode(PostRequest(imageID: "MTg1NjkxNQ",
+            let postData = try JSONEncoder().encode(PostRequest(imageID: imageID,
                                                                 userID: UIDevice.uniqID(),
                                                                 likeValue: value))
             let request = makeRequest(with: Constants.likes,
@@ -110,6 +111,23 @@ final class NetworkServiceImplementation : NetworkService {
         } catch {
             
         }
+    }
+    
+    func fetchImageCategories(onSuccess : @escaping ([Category]) -> (), onFailure : @escaping () -> Void) {
+        let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.categories)) { (data, response, error) in
+            guard let allData = data, error == nil else {
+                return
+            }
+            do {
+                let categories = try JSONDecoder().decode([Category].self, from: allData)
+                DispatchQueue.main.async {
+                    onSuccess(categories)
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+        dataTask.resume()
     }
 }
 
@@ -136,6 +154,7 @@ private extension NetworkServiceImplementation {
         static let host = "https://api.thecatapi.com/v1/"
         static let breedsUrl = "breeds"
         static let likes = "votes"
+        static let categories = "categories"
     }
     
     enum ImagesOrder {
@@ -151,7 +170,7 @@ private extension NetworkServiceImplementation {
 }
 
 // MARK: Images
-struct Image : Codable {
+struct Image : Codable, Equatable {
     let height, width : Int
     let imageID, imageUrl : String
     
@@ -160,5 +179,6 @@ struct Image : Codable {
         case imageID = "id"
         case imageUrl = "url"
     }
+    
 }
 

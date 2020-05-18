@@ -24,7 +24,7 @@
 		E84BE34A246448FF00A8E1E9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE349246448FF00A8E1E9 /* AppContext.swift */; };
 		E84BE34C24644A6000A8E1E9 /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */; };
 		E84BE34F2464573400A8E1E9 /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */; };
-		E84BE351246457A600A8E1E9 /* FullScrenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE350246457A600A8E1E9 /* FullScrenViewModel.swift */; };
+		E84BE351246457A600A8E1E9 /* FullScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */; };
 		E84BE35324645AA300A8E1E9 /* FullScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE35224645AA300A8E1E9 /* FullScreenTableViewCell.swift */; };
 		E8542EEB245B12C7008D56B0 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8542EEA245B12C7008D56B0 /* Strings.swift */; };
 		E8542EEF245B130A008D56B0 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8542EEE245B130A008D56B0 /* NetworkService.swift */; };
@@ -81,6 +81,9 @@
 		E85710342466922800FEB4DD /* patient.png in Resources */ = {isa = PBXBuildFile; fileRef = E85710062466922800FEB4DD /* patient.png */; };
 		E85710352466922800FEB4DD /* quiet.png in Resources */ = {isa = PBXBuildFile; fileRef = E85710072466922800FEB4DD /* quiet.png */; };
 		E85710372466CA2F00FEB4DD /* UIDevice+UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85710362466CA2F00FEB4DD /* UIDevice+UUID.swift */; };
+		E8730D1D2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8730D1C2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift */; };
+		E8730D1F2472BE69005EF0D4 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8730D1E2472BE69005EF0D4 /* CategoryCollectionViewCell.swift */; };
+		E8730D212472E7E1005EF0D4 /* AppSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8730D202472E7E1005EF0D4 /* AppSnapshot.swift */; };
 		E8937938246EAF2000AB87A7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E8937937246EAF2000AB87A7 /* Localizable.strings */; };
 		E893793C246EC46400AB87A7 /* SingleBreedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E893793B246EC46400AB87A7 /* SingleBreedViewModel.swift */; };
 		E893793E246ED90C00AB87A7 /* BarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E893793D246ED90C00AB87A7 /* BarButtonItem.swift */; };
@@ -122,7 +125,7 @@
 		E84BE349246448FF00A8E1E9 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
-		E84BE350246457A600A8E1E9 /* FullScrenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScrenViewModel.swift; sourceTree = "<group>"; };
+		E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewModel.swift; sourceTree = "<group>"; };
 		E84BE35224645AA300A8E1E9 /* FullScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTableViewCell.swift; sourceTree = "<group>"; };
 		E8542EEA245B12C7008D56B0 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E8542EEE245B130A008D56B0 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -179,6 +182,9 @@
 		E85710062466922800FEB4DD /* patient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = patient.png; path = Pawsome/Resources/BreedTempImg/patient.png; sourceTree = SOURCE_ROOT; };
 		E85710072466922800FEB4DD /* quiet.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = quiet.png; path = Pawsome/Resources/BreedTempImg/quiet.png; sourceTree = SOURCE_ROOT; };
 		E85710362466CA2F00FEB4DD /* UIDevice+UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIDevice+UUID.swift"; sourceTree = "<group>"; };
+		E8730D1C2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCategoriesCollectionView.swift; sourceTree = "<group>"; };
+		E8730D1E2472BE69005EF0D4 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		E8730D202472E7E1005EF0D4 /* AppSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSnapshot.swift; sourceTree = "<group>"; };
 		E8937937246EAF2000AB87A7 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		E893793B246EC46400AB87A7 /* SingleBreedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleBreedViewModel.swift; sourceTree = "<group>"; };
 		E893793D246ED90C00AB87A7 /* BarButtonItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarButtonItem.swift; sourceTree = "<group>"; };
@@ -241,7 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */,
-				E84BE350246457A600A8E1E9 /* FullScrenViewModel.swift */,
+				E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */,
 			);
 			path = FullScreenFeed;
 			sourceTree = "<group>";
@@ -262,6 +268,7 @@
 				E8542EEE245B130A008D56B0 /* NetworkService.swift */,
 				E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */,
 				E8BC3B7F2465B3C200C839D4 /* UserDefaultService.swift */,
+				E8730D202472E7E1005EF0D4 /* AppSnapshot.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -378,6 +385,7 @@
 				E82667E7245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift */,
 				E84BE35224645AA300A8E1E9 /* FullScreenTableViewCell.swift */,
 				E812315D245DA94100040C2B /* SingleViewFeedCell.swift */,
+				E8730D1E2472BE69005EF0D4 /* CategoryCollectionViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -391,6 +399,7 @@
 				E89EFA8A246AE41100D5D215 /* BreedHeaderView.swift */,
 				E89EFA89246AE41100D5D215 /* HeaderDetailsView.swift */,
 				E82B6CDF246D955700D6F38D /* CustomSegmentedController.swift */,
+				E8730D1C2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -564,18 +573,21 @@
 				E8B42F7B24657F1600FBA2C8 /* SavedImagesViewController.swift in Sources */,
 				E82B6CE0246D955700D6F38D /* CustomSegmentedController.swift in Sources */,
 				E812315E245DA94100040C2B /* SingleViewFeedCell.swift in Sources */,
+				E8730D212472E7E1005EF0D4 /* AppSnapshot.swift in Sources */,
 				E82667EE245C5CC500CBAEA7 /* SingleBreedCollectionViewCell.swift in Sources */,
 				E8542EF7245B18CC008D56B0 /* UIColor.swift in Sources */,
 				E89EFA8D246AE41100D5D215 /* BreedHeaderView.swift in Sources */,
 				E8B42F7924657EDD00FBA2C8 /* BreedScrollView.swift in Sources */,
+				E8730D1D2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift in Sources */,
 				E8542EEB245B12C7008D56B0 /* Strings.swift in Sources */,
 				E82667E4245C074900CBAEA7 /* UIView+Corners.swift in Sources */,
+				E8730D1F2472BE69005EF0D4 /* CategoryCollectionViewCell.swift in Sources */,
 				E84BE34A246448FF00A8E1E9 /* AppContext.swift in Sources */,
 				E8542EEF245B130A008D56B0 /* NetworkService.swift in Sources */,
 				E8542EFB245B1CB1008D56B0 /* UITableView+CellRegistration.swift in Sources */,
 				E82667E2245C059900CBAEA7 /* FeedCollectionViewController.swift in Sources */,
 				E82B6CDA246D692400D6F38D /* UIView+Animation.swift in Sources */,
-				E84BE351246457A600A8E1E9 /* FullScrenViewModel.swift in Sources */,
+				E84BE351246457A600A8E1E9 /* FullScreenViewModel.swift in Sources */,
 				E82667EC245C4B7C00CBAEA7 /* Label.swift in Sources */,
 				E85710372466CA2F00FEB4DD /* UIDevice+UUID.swift in Sources */,
 				E8B42F7D2465994400FBA2C8 /* BreedShortInfoView.swift in Sources */,

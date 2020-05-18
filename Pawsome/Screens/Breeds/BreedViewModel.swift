@@ -37,6 +37,17 @@ struct Breed : Codable {
     }
 }
 
+// MARK: - Category
+
+struct Category : Codable {
+    let id : Int
+    let name : String
+    
+    enum CodingKeys : String, CodingKey {
+        case id, name
+    }
+}
+
 // MARK: - Weight
 struct Weight : Codable {
     let metricWeight : String

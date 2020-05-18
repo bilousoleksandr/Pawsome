@@ -9,13 +9,12 @@
 import UIKit
 
 final class FullScreenViewController : UITableViewController {
-    private var fullScreenViewModel : FullScrenViewModel
-    private var visibleCellIndexPath : IndexPath?
+    private var fullScreenViewModel : FullScreenViewModel
     
-    init(fullScreenViewModel : FullScrenViewModel) {
+    init(fullScreenViewModel : FullScreenViewModel) {
         self.fullScreenViewModel = fullScreenViewModel
         super.init(style: .plain)
-        navigationItem.title = Strings.similarCats
+        navigationItem.title = fullScreenViewModel.navigationItemTitle
     }
     
     required init?(coder: NSCoder) {
@@ -26,6 +25,8 @@ final class FullScreenViewController : UITableViewController {
         super.viewDidLoad()
         tableView.prefetchDataSource = self
         tableView.registerReusableCell(FullScreenTableViewCell.self)
+        tableView.tableHeaderView = UIView()
+        tableView.tableFooterView = UIView()
         
         fullScreenViewModel.imagesListDidChange = { [weak self] _ in
             guard let self = self else { fatalError() }
@@ -34,8 +35,8 @@ final class FullScreenViewController : UITableViewController {
             if currentIndex < newIndexes  {
                 let indexes = Array(currentIndex...newIndexes).map({ IndexPath(row: $0, section: 0)})
                 self.tableView.performBatchUpdates({
-                    self.tableView.insertRows(at: indexes, with: .fade)
-                }, completion: nil)
+                    self.tableView.insertRows(at: indexes, with: .none)
+                }, completion: nil )
             }
         }
         fullScreenViewModel.showNewImages()
@@ -85,6 +86,10 @@ extension FullScreenViewController {
         }
         itemCell.selectionStyle = .none
         return itemCell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
     }
 }
 

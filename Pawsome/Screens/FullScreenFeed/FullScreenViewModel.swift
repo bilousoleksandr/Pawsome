@@ -1,5 +1,5 @@
 //
-//  FullScrenViewModel.swift
+//  FullScreenViewModelProtocol.swift
 //  Pawsome
 //
 //  Created by Marentilo on 07.05.2020.
@@ -8,11 +8,13 @@
 
 import UIKit
 
-protocol FullScrenViewModelProtocol {
+protocol FullScreenViewModelProtocol {
     /// Total amount of loaded images that stored in viewModel
     var itemsCount : Int { get }
     /// Call clousure if amount of images in model has chaged
-    var imagesListDidChange : ((FullScrenViewModelProtocol) -> Void)? {get set}
+    var imagesListDidChange : ((FullScreenViewModelProtocol) -> Void)? {get set}
+    /// Return title for fullScreen NavigationController
+    var navigationItemTitle : String { get }
     /// Load new imaged from service and notify
     func showNewImages()
     /// Return fetched image from disk for specific index
@@ -29,29 +31,37 @@ protocol FullScrenViewModelProtocol {
     func likeImage(at index : Int)
 }
 
-final class FullScrenViewModel : FullScrenViewModelProtocol {
+final class FullScreenViewModel : FullScreenViewModelProtocol {
     private let batchAmount = 5
     private let networkService : NetworkService
     private let userDefaultsService : UserDefaultService
     private let fileManagerService : FileManagerService
-    private var savedUrls : [String] = []
-    private var likedUrls : [String] = []
-    private var urls : [String] = [] {
+    private let category : Category?
+    private var savedImages : [Image] = []
+    private var likedImages : [Image] = []
+    private var images : [Image] = [] {
         didSet {
-            if urls.count > 0, urls.count % batchAmount == 0, let callbackAction = imagesListDidChange {
+            if images.count > 0, images.count % batchAmount == 0, let callbackAction = imagesListDidChange {
+                isLoading = false
                 callbackAction(self)
             }
         }
     }
+    private var isLoading = false
     
-    var itemsCount : Int { urls.count }
-    var imagesListDidChange : ((FullScrenViewModelProtocol) -> Void)?
+    var itemsCount : Int { images.count }
+    var imagesListDidChange : ((FullScreenViewModelProtocol) -> Void)?
+    var navigationItemTitle : String { return category?.name.capitalizedFirst ?? Strings.similarCats }
     
-    init(_ imageURL : String,
+    init(_ image : Image? = nil,
+         _ category : Category? = nil,
          networkService : NetworkService = AppDelegate.shared.context.networkService,
          fileManagerService : FileManagerService = AppDelegate.shared.context.fileManagerService,
          userDefaultsService : UserDefaultService = AppDelegate.shared.context.userDefaultService) {
-        self.urls.append(imageURL)
+        self.category = category
+        if let originUrl = image {
+            self.images.append(originUrl)
+        }
         self.networkService = networkService
         self.fileManagerService = fileManagerService
         self.userDefaultsService = userDefaultsService
@@ -60,20 +70,21 @@ final class FullScrenViewModel : FullScrenViewModelProtocol {
     
     private func savedList () {
         if let userImages = userDefaultsService.getUserImages() {
-            savedUrls = userImages.savedImages
-            likedUrls = userImages.likedImages
+            savedImages = userImages.savedImages
+            likedImages = userImages.likedImages
         }
     }
     
     private func loadImages() {
-        networkService.getRandomCatImages(imgCount: batchAmount) { [weak self] (imagesUrls) in
+        isLoading = true
+        networkService.getRandomCatImages(category : category?.id, imgCount: batchAmount) { [weak self] (imagesList) in
             guard let self = self else { return }
-            imagesUrls.forEach { (url) in
-                self.networkService.downloadImage(atUrl: url, onSuccess:  { [weak self] (image, data) in
+            imagesList.forEach { (imageModel) in
+                self.networkService.downloadImage(atUrl: imageModel.imageUrl, onSuccess:  { [weak self] (image, data) in
                     guard let self = self else { fatalError() }
-                    self.fileManagerService.saveImage(data, at: url, onSuccess: { [weak self] in
+                    self.fileManagerService.saveImage(data, at: imageModel.imageUrl, onSuccess: { [weak self] in
                         guard let self = self else { fatalError() }
-                        self.urls.append(url)
+                        self.images.append(imageModel)
                     })
                 }, onFailure: {
                     // TODO: - Complition for failure
@@ -83,51 +94,55 @@ final class FullScrenViewModel : FullScrenViewModelProtocol {
     }
     
     func getImage(for index : Int, onSuccess: @escaping (UIImage?) -> Void) {
-        if index < urls.count {
-            fileManagerService.fetchImage(at: urls[index]) { (image) in
+        if index < images.count {
+            fileManagerService.fetchImage(at: images[index].imageUrl, onSuccess:  { (image) in
                 onSuccess(image)
-            }
+            }, onFailure: {
+                
+            })
         }
     }
     
     func showNewImages() {
-        loadImages()
+        if !isLoading {
+            loadImages()
+        }
     }
     
     func removeAllImages() {
-        urls.remove(at: 0)
-        fileManagerService.deleteAllItems(at: urls.filter({ !savedUrls.contains($0) }))
-        urls.removeAll()
+        images.remove(at: 0)
+        fileManagerService.deleteAllItems(at: images.filter({ !savedImages.contains($0) }))
+        images.removeAll()
     }
     
     // MARK: - Save and Like actions
     func saveImage(at index : Int) {
-        if let firstIndex = savedUrls.firstIndex(of: urls[index]) {
-            savedUrls.remove(at: firstIndex)
+        if let firstIndex = savedImages.firstIndex(of: images[index]) {
+            savedImages.remove(at: firstIndex)
         } else {
-            savedUrls.append(urls[index])
+            savedImages.append(images[index])
         }
-        userDefaultsService.updateSavedList(urls[index])
+        userDefaultsService.updateSavedList(images[index])
     }
     
     func isSavedImage(for index : Int) -> Bool {
-        return savedUrls.contains(urls[index])
+        return savedImages.contains(images[index])
     }
     
     func likeImage(at index : Int) {
         let vote : Int
-        if let firstIndex = likedUrls.firstIndex(of: urls[index]) {
-            likedUrls.remove(at: firstIndex)
+        if let firstIndex = likedImages.firstIndex(of: images[index]) {
+            likedImages.remove(at: firstIndex)
             vote = 0
         } else {
-            likedUrls.append(urls[index])
+            likedImages.append(images[index])
             vote = 1
         }
-        networkService.postLike(vote, "id")
-        userDefaultsService.updateLikedImages(urls[index])
+        networkService.postLike(vote, images[index].imageID)
+        userDefaultsService.updateLikedImages(images[index])
     }
     
     func isLikedImage(for index : Int) -> Bool {
-        return likedUrls.contains(urls[index])
+        return likedImages.contains(images[index])
     }
 }

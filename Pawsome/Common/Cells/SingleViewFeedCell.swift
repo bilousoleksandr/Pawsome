@@ -9,11 +9,7 @@
 import UIKit
 
 final class SingleViewFeedCell : UICollectionViewCell {
-    private let imageView : UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleToFill
-        return view
-    } ()
+    private let imageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: .zero)

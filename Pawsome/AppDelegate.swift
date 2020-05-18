@@ -27,5 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
         window?.rootViewController = vc
         return true
     }
+    
+    func applicationWillTerminate(_ application: UIApplication) {
+        AppSnapshot.removeImagesFromDisk()
+    }
 }
 

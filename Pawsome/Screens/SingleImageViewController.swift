@@ -10,7 +10,10 @@ import UIKit
 
 final class SingleImageViewController : UIViewController {
     private let largeImageView = UIImageView()
+    private let likeButton = Button.makeButton(#imageLiteral(resourceName: "loveCommon"), #imageLiteral(resourceName: "love"))
+    private let savedButton = Button.makeButton(#imageLiteral(resourceName: "bookmark"), #imageLiteral(resourceName: "bookmark_selected"))
     private let singleImageViewModel : SingleImageViewModel
+    
     
     init(sinleImageViewModel : SingleImageViewModel) {
         self.singleImageViewModel = sinleImageViewModel
@@ -29,21 +32,34 @@ final class SingleImageViewController : UIViewController {
     
     private func setupView() {
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        view.addSubview(largeImageView)
+        [likeButton, savedButton, largeImageView].forEach({
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        })
         setupConstrains()
+        setupImageGestures()
+        likeButton.addTarget(self, action: #selector(likeButtonDidPress(sender:)), for: .touchUpInside)
+        savedButton.addTarget(self, action: #selector(savedButtonDidPress(sender:)), for: .touchUpInside)
+        likeButton.isSelected = singleImageViewModel.isLiked
+        savedButton.isSelected = singleImageViewModel.isSaved
+        
         singleImageViewModel.fechImage { [weak self] (image) in
             self?.largeImageView.image = image
         }
-        setupImageGestures()
     }
     
     private func setupConstrains() {
-        largeImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             largeImageView.widthAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
             largeImageView.heightAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
             largeImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            largeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            largeImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            likeButton.topAnchor.constraint(equalTo: largeImageView.bottomAnchor, constant: StyleGuide.Spaces.double),
+            likeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: StyleGuide.Spaces.double),
+            
+            savedButton.topAnchor.constraint(equalTo: largeImageView.bottomAnchor, constant: StyleGuide.Spaces.double),
+            savedButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -StyleGuide.Spaces.double)
         ])
     }
     
@@ -58,7 +74,6 @@ final class SingleImageViewController : UIViewController {
     }
     
     private func pinchDidEnd() {
-        let scale = largeImageView.frame.width / view.bounds.width
         UIView.animate(withDuration: 0.3, animations: { [weak self] in
             self?.largeImageView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
         }, completion: nil)
@@ -83,6 +98,20 @@ final class SingleImageViewController : UIViewController {
             self?.largeImageView.transform = CGAffineTransform(scaleX: finalScale, y: finalScale)
         }, completion: nil)
     }
+    
+    private func likedButtonHandler() {
+        singleImageViewModel.likeImage(isSelected: likeButton.isSelected)
+        likeButton.isSelected ? likeButton.layer.removeAnimation(forKey: "position") : likeButton.layer.removeAnimation(forKey: "transform.scale")
+        likeButton.isSelected ? likeButton.makePulse() : likeButton.makeShake()
+    }
+    
+    private func savedButtonHandler() {
+        singleImageViewModel.saveImage()
+        if !savedButton.isSelected {
+            savedButton.layer.removeAllAnimations()
+            savedButton.makeShake()
+        }
+    }
 }
 
 // MARK: - Actions
@@ -101,6 +130,16 @@ final class SingleImageViewController : UIViewController {
         } else if sender.state == .ended || sender.state == .cancelled {
             panGestureDidEnd()
         }
+    }
+    
+    func likeButtonDidPress(sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        likedButtonHandler()
+    }
+    
+    func savedButtonDidPress(sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        savedButtonHandler()
     }
 }
 

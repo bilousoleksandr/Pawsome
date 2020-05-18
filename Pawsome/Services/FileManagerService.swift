@@ -16,9 +16,9 @@ protocol FileManagerService {
     /// Save image data with given url on background queue
     func saveImage(_ data: Data, at path : String, onSuccess: @escaping () -> Void)
     /// Fetch data for given URL in background queue and return result on main thread
-    func fetchImage(at path : String, onSuccess: @escaping (UIImage?) -> Void)
+    func fetchImage(at path : String, onSuccess: @escaping (UIImage?) -> Void, onFailure: @escaping () -> Void)
     /// Delete all given data from disk
-    func deleteAllItems(at Urls: [String])
+    func deleteAllItems(at Urls: [Image])
 }
 
 final class FileManagerServiceImplementation : FileManagerService {
@@ -50,23 +50,28 @@ final class FileManagerServiceImplementation : FileManagerService {
         }
     }
     
-    func fetchImage(at path : String, onSuccess: @escaping (UIImage?) -> Void) {
+    func fetchImage(at path : String, onSuccess: @escaping (UIImage?) -> Void, onFailure: @escaping () -> Void) {
         let imagePath = urlForImage(path)
-        if fileManager.fileExists(atPath: imagePath.path) {
-            DispatchQueue.global().async {
-                guard let data = try? Data(contentsOf: imagePath) else { return }
-                DispatchQueue.main.async {
-                    onSuccess(UIImage(data: data))
-                }
+        guard fileManager.fileExists(atPath: imagePath.path)else {
+            onFailure()
+            return
+        }
+        DispatchQueue.global().async {
+            guard let data = try? Data(contentsOf: imagePath), let image = UIImage(data: data) else {
+                onFailure()
+                return
+            }
+            DispatchQueue.main.async {
+                onSuccess(image)
             }
         }
     }
     
-    func deleteAllItems(at urls: [String]) {
+    func deleteAllItems(at urls: [Image]) {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { fatalError() }
             urls.forEach {
-                let imagePath = self.urlForImage($0)
+                let imagePath = self.urlForImage($0.imageUrl)
                 do {
                     try self.fileManager.removeItem(atPath: imagePath.path)
                 } catch {
