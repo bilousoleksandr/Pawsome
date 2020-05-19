@@ -1,5 +1,5 @@
 //
-//  FullScreenViewModelProtocol.swift
+//  FullScreenViewModel.swift
 //  Pawsome
 //
 //  Created by Marentilo on 07.05.2020.
