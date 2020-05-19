@@ -34,7 +34,7 @@ protocol NetworkService {
     func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void)
     /// Post users like to server with unique UUID
     func postLike(_ value : Int, _ imageID : String)
-    /// Return actual image's categories
+    /// Return actual image's categories on success
     func fetchImageCategories(onSuccess : @escaping ([Category]) -> (), onFailure : @escaping () -> Void)
 }
 
@@ -47,21 +47,14 @@ final class NetworkServiceImplementation : NetworkService {
     
     func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void) {
         let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.breedsUrl)) { (data, response, error) in
-            guard let allData = data, error == nil else {
+            guard let allData = data, error == nil, let breeds = Serializer.deserialize(from: allData, value: [Breed].self) else {
                 DispatchQueue.main.async {
                     onFailure()
                 }
                 return
             }
-            do {
-                let breeds = try JSONDecoder().decode([Breed].self, from: allData)
-                DispatchQueue.main.async {
-                    onSuccess(breeds)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    onFailure()
-                }
+            DispatchQueue.main.async {
+                onSuccess(breeds)
             }
         }
         dataTask.resume()
@@ -70,21 +63,14 @@ final class NetworkServiceImplementation : NetworkService {
     func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> (), onFailure : @escaping () -> Void) {
         let urlName = category == nil ? "images/search?limit=\(imgCount)&order=\(ImagesOrder.random)&size=small" : "images/search?category_ids=\(category ?? 0)&limit=\(imgCount)&order=\(ImagesOrder.random)&size=small"
         let dataTask = urlSession.dataTask(with: makeRequest(with: urlName)) { (data, response, error) in
-            guard let allData = data, error == nil else {
+            guard let allData = data, error == nil, let images = Serializer.deserialize(from: allData, value: [Image].self) else {
                 DispatchQueue.main.async {
                     onFailure()
                 }
                 return
             }
-            do {
-                let images = try JSONDecoder().decode([Image].self, from: allData)
-                DispatchQueue.main.async {
-                    onSuccess(images)
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    onFailure()
-                }
+            DispatchQueue.main.async {
+                onSuccess(images)
             }
         }
         dataTask.resume()
@@ -105,36 +91,29 @@ final class NetworkServiceImplementation : NetworkService {
     }
     
     func postLike(_ value : Int, _ imageID : String) {
-        do {
-            let postData = try JSONEncoder().encode(PostRequest(imageID: imageID,
-                                                                userID: UIDevice.uniqID(),
-                                                                likeValue: value))
-            let request = makeRequest(with: Constants.likes,
+        let requestBody = PostRequest(imageID: imageID,
+                                      userID: UIDevice.uniqID(),
+                                      likeValue: value)
+        guard let postedData = Serializer.serialize(value: requestBody) else { return }
+        let request = makeRequest(with: Constants.likes,
                                       httpMethod: HTTPMethods.post,
-                                      data: postData,
+                                      data: postedData,
                                       header: Constants.postHeader)
-            let task = urlSession.dataTask(with: request) { (_, response, error) in
-                guard error == nil else { return }
-            }
-            task.resume()
-        } catch {
-            
+        let task = urlSession.dataTask(with: request) { (_, _, error) in
+            guard error == nil else { return }
         }
+        task.resume()
+
     }
     
     func fetchImageCategories(onSuccess : @escaping ([Category]) -> (), onFailure : @escaping () -> Void) {
         let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.categories)) { (data, response, error) in
-            guard let allData = data, error == nil else {
+            guard let allData = data, error == nil, let categories = Serializer.deserialize(from: allData, value: [Category].self) else {
                 onFailure()
                 return
             }
-            do {
-                let categories = try JSONDecoder().decode([Category].self, from: allData)
-                DispatchQueue.main.async {
-                    onSuccess(categories)
-                }
-            } catch {
-                onFailure()
+            DispatchQueue.main.async {
+                onSuccess(categories)
             }
         }
         dataTask.resume()

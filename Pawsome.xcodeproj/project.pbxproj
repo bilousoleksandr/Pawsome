@@ -90,6 +90,7 @@
 		E8937943246F01BF00AB87A7 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8937942246F01BF00AB87A7 /* UIImageView.swift */; };
 		E89E133824740E70000D82B3 /* NetworkErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E133724740E70000D82B3 /* NetworkErrorView.swift */; };
 		E89E133A24743B07000D82B3 /* FullScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E133924743B07000D82B3 /* FullScreenViewModel.swift */; };
+		E89E133C2474426B000D82B3 /* Serializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E133B2474426B000D82B3 /* Serializer.swift */; };
 		E89EFA8C246AE41100D5D215 /* HeaderDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA89246AE41100D5D215 /* HeaderDetailsView.swift */; };
 		E89EFA8D246AE41100D5D215 /* BreedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA8A246AE41100D5D215 /* BreedHeaderView.swift */; };
 		E89EFA8E246AE41100D5D215 /* BreedFeatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA8B246AE41100D5D215 /* BreedFeatureView.swift */; };
@@ -192,6 +193,7 @@
 		E8937942246F01BF00AB87A7 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		E89E133724740E70000D82B3 /* NetworkErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorView.swift; sourceTree = "<group>"; };
 		E89E133924743B07000D82B3 /* FullScreenViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenViewModel.swift; sourceTree = "<group>"; };
+		E89E133B2474426B000D82B3 /* Serializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serializer.swift; sourceTree = "<group>"; };
 		E89EFA89246AE41100D5D215 /* HeaderDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HeaderDetailsView.swift; path = Pawsome/Screens/HeaderDetailsView.swift; sourceTree = SOURCE_ROOT; };
 		E89EFA8A246AE41100D5D215 /* BreedHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreedHeaderView.swift; path = Pawsome/Screens/BreedHeaderView.swift; sourceTree = SOURCE_ROOT; };
 		E89EFA8B246AE41100D5D215 /* BreedFeatureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreedFeatureView.swift; path = Pawsome/Screens/BreedFeatureView.swift; sourceTree = SOURCE_ROOT; };
@@ -268,6 +270,7 @@
 				E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */,
 				E8BC3B7F2465B3C200C839D4 /* UserDefaultService.swift */,
 				E8730D202472E7E1005EF0D4 /* AppSnapshot.swift */,
+				E89E133B2474426B000D82B3 /* Serializer.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				E89E133824740E70000D82B3 /* NetworkErrorView.swift in Sources */,
 				E8E35FE7245AE3160088EDB2 /* AppDelegate.swift in Sources */,
 				E84BE35324645AA300A8E1E9 /* FullScreenTableViewCell.swift in Sources */,
+				E89E133C2474426B000D82B3 /* Serializer.swift in Sources */,
 				E84BE34C24644A6000A8E1E9 /* FileManagerService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -23,22 +23,6 @@ struct AllFeedImages : Codable {
     var allImages : [Image]
 }
 
-// MARK: - Serializer
-struct Serializer {
-    /// Return UserImagesModel if it exist or create new model with empty urls list
-    static func getUserImages(from data: Data) throws -> UserImagesModel {
-        let decoder = JSONDecoder()
-        let decodedValue : UserImagesModel = try decoder.decode(UserImagesModel.self, from: data)
-        return decodedValue
-    }
-    /// Create binary data from given model
-    static func convertUserImages(userImages: UserImagesModel) throws -> Data {
-        let encoder = JSONEncoder()
-        let encodedValue : Data = try encoder.encode(userImages)
-        return encodedValue
-    }
-}
-
 protocol UserDefaultServiceHolder {
     var userDefaultService : UserDefaultService { get }
 }
@@ -64,13 +48,9 @@ final class UserDefaultServiceImpementation : UserDefaultService {
     }
     
     func getUserImages () -> UserImagesModel? {
-        if let data = userDefaults.value(forKey: Constants.storedImagesKey) as? Data {
-            do {
-                let savedImages = try Serializer.getUserImages(from: data)
+        if let data = userDefaults.value(forKey: Constants.storedImagesKey) as? Data,
+            let savedImages = Serializer.deserialize(from: data, value: UserImagesModel.self){
                 return savedImages
-            } catch {
-                print(error.localizedDescription)
-            }
         }
         return nil
     }
@@ -91,11 +71,8 @@ final class UserDefaultServiceImpementation : UserDefaultService {
     }
     
     private func saveUpdatedValue(_ imageList : UserImagesModel) {
-        do {
-            let encodeValue = try Serializer.convertUserImages(userImages: imageList)
+        if let encodeValue = Serializer.serialize(value: imageList) {
             userDefaults.set(encodeValue, forKey: Constants.storedImagesKey)
-        } catch {
-            print(error.localizedDescription)
         }
     }
     
@@ -116,13 +93,14 @@ final class UserDefaultServiceImpementation : UserDefaultService {
     
     func saveFeedImages(_ imageURLS : [Image]) {
         let allImages = AllFeedImages(allImages: imageURLS)
-        guard let data = try? JSONEncoder().encode(allImages) else { return }
-        userDefaults.set(data, forKey: Constants.feedImagesKey)
+        if let data = Serializer.serialize(value: allImages) {
+            userDefaults.set(data, forKey: Constants.feedImagesKey)
+        }
     }
     
     func getUnusedImages() -> [Image]? {
         if let data = userDefaults.value(forKey: Constants.feedImagesKey) as? Data,
-            let feedModel = try? JSONDecoder().decode(AllFeedImages.self, from: data),
+            let feedModel = Serializer.deserialize(from: data, value: AllFeedImages.self),
             let userImages = getUserImages() {
             return feedModel.allImages.filter({ !userImages.likedImages.contains($0) && !userImages.savedImages.contains($0) })
         }
