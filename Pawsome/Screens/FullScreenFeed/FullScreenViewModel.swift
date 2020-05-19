@@ -77,7 +77,7 @@ final class FullScreenViewModel : FullScreenViewModelProtocol {
     
     private func loadImages() {
         isLoading = true
-        networkService.getRandomCatImages(category : category?.id, imgCount: batchAmount) { [weak self] (imagesList) in
+        networkService.getRandomCatImages(category : category?.id, imgCount: batchAmount, onSuccess:  { [weak self] (imagesList) in
             guard let self = self else { return }
             imagesList.forEach { (imageModel) in
                 self.networkService.downloadImage(atUrl: imageModel.imageUrl, onSuccess:  { [weak self] (image, data) in
@@ -90,7 +90,8 @@ final class FullScreenViewModel : FullScreenViewModelProtocol {
                     // TODO: - Complition for failure
                 })
             }
-        }
+        }, onFailure: {
+        })
     }
     
     func getImage(for index : Int, onSuccess: @escaping (UIImage?) -> Void) {

@@ -13,6 +13,8 @@ protocol FeedViewModelProtocol : class {
     var imagesListDidChange : ((FeedViewModelProtocol) -> ())? {get set}
     /// Callback action which called after categories list did update
     var categoriesListDidChange : ((FeedViewModelProtocol) -> ())? { get set }
+    /// Callback for loading error from server
+    var listDidFailLoading : (() -> ())? {get set}
     /// Check if previous fetch is canceled before send one more request
     var canPrefetchMoreItems : Bool { get }
     /// Actual array of image categories
@@ -27,6 +29,8 @@ protocol FeedViewModelProtocol : class {
     func imageForPressedItem(at index : Int) -> Image
     /// Call action to save image URLS before view will dismiss
     func saveImagesOnDisk()
+    /// Load actual categories from server
+    func loadCategories()
 }
 
 class FeedViewModel : FeedViewModelProtocol {
@@ -35,6 +39,7 @@ class FeedViewModel : FeedViewModelProtocol {
     private let fileManagerService : FileManagerService
     private let userDefaultsService : UserDefaultService
     var imagesListDidChange : ((FeedViewModelProtocol) -> ())?
+    var listDidFailLoading : (() -> ())?
     var categoriesListDidChange : ((FeedViewModelProtocol) -> ())? {
         didSet {
             loadCategories()
@@ -74,7 +79,7 @@ class FeedViewModel : FeedViewModelProtocol {
     }
     
     private func loadImagesUrls() {
-        networkService.getRandomCatImages(category: nil, imgCount: batchCount) { [weak self] (imagesList) in
+        networkService.getRandomCatImages(category: nil, imgCount: batchCount, onSuccess: { [weak self] (imagesList) in
             guard let self = self else { fatalError() }
             imagesList.forEach { imageModel in
                 self.networkService.downloadImage(atUrl: imageModel.imageUrl, onSuccess:  { (image, data) in
@@ -82,13 +87,17 @@ class FeedViewModel : FeedViewModelProtocol {
                         self.images.append(imageModel)
                     })
                 }, onFailure: {
-                    // TODO: - Complition for failure
+                    print("Error occured")
                 })
             }
-        }
+        }, onFailure: { [weak self] in
+            if let callback = self?.listDidFailLoading {
+                callback()
+            }
+        })
     }
     
-    private func loadCategories() {
+    func loadCategories() {
         networkService.fetchImageCategories(onSuccess: { [weak self] (loadedCategories) in
             self?.categories = loadedCategories
         }, onFailure: {

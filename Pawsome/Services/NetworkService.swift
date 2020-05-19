@@ -29,7 +29,7 @@ protocol NetworkService {
     /// Dowload list of breeds and its description from server
     func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void)
     /// Return array of image urls from server with given amount of elements
-    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> ())
+    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> (), onFailure : @escaping () -> Void)
     /// Load data from given url and return UIImage and Data via callback clousure
     func downloadImage(atUrl url: String, onSuccess: @escaping (UIImage?, Data) -> (), onFailure : @escaping () -> Void)
     /// Post users like to server with unique UUID
@@ -48,7 +48,9 @@ final class NetworkServiceImplementation : NetworkService {
     func fetchAllBreeds(onSuccess : @escaping ([Breed]) -> (), onFailure : @escaping () -> Void) {
         let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.breedsUrl)) { (data, response, error) in
             guard let allData = data, error == nil else {
-                onFailure()
+                DispatchQueue.main.async {
+                    onFailure()
+                }
                 return
             }
             do {
@@ -57,16 +59,21 @@ final class NetworkServiceImplementation : NetworkService {
                     onSuccess(breeds)
                 }
             } catch {
-                onFailure()
+                DispatchQueue.main.async {
+                    onFailure()
+                }
             }
         }
         dataTask.resume()
     }
     
-    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> ()) {
+    func getRandomCatImages(category : Int?, imgCount : Int, onSuccess: @escaping ([Image]) -> (), onFailure : @escaping () -> Void) {
         let urlName = category == nil ? "images/search?limit=\(imgCount)&order=\(ImagesOrder.random)&size=small" : "images/search?category_ids=\(category ?? 0)&limit=\(imgCount)&order=\(ImagesOrder.random)&size=small"
         let dataTask = urlSession.dataTask(with: makeRequest(with: urlName)) { (data, response, error) in
             guard let allData = data, error == nil else {
+                DispatchQueue.main.async {
+                    onFailure()
+                }
                 return
             }
             do {
@@ -75,7 +82,9 @@ final class NetworkServiceImplementation : NetworkService {
                     onSuccess(images)
                 }
             } catch {
-                print(error.localizedDescription)
+                DispatchQueue.main.async {
+                    onFailure()
+                }
             }
         }
         dataTask.resume()
@@ -116,6 +125,7 @@ final class NetworkServiceImplementation : NetworkService {
     func fetchImageCategories(onSuccess : @escaping ([Category]) -> (), onFailure : @escaping () -> Void) {
         let dataTask = urlSession.dataTask(with: makeRequest(with: Constants.categories)) { (data, response, error) in
             guard let allData = data, error == nil else {
+                onFailure()
                 return
             }
             do {
@@ -124,7 +134,7 @@ final class NetworkServiceImplementation : NetworkService {
                     onSuccess(categories)
                 }
             } catch {
-                print(error.localizedDescription)
+                onFailure()
             }
         }
         dataTask.resume()

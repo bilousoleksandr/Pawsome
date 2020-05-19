@@ -20,6 +20,8 @@ protocol SavedImagesViewModelProtocol {
     var likedImagesCount : Int { get }
     /// Notify view if images URL count is updated
     var urlsArrayDidUpdate : ((SavedImagesViewModelProtocol) -> Void)? { get set }
+    /// Check if imageSource is empry and return special image of nil if some values exist
+    func imageForEmptySource(_ imageList : ImagesList) -> UIImage?
     /// Load image from disk and return value if it exist
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void)
     ///URL for item at specific path
@@ -92,5 +94,13 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
     func urlForItem(at index : Int, for list : ImagesList) -> Image {
         let source = sourceList(list)
         return source[index]
+    }
+    
+    func imageForEmptySource(_ imageList : ImagesList) -> UIImage? {
+        loadImages()
+        if !sourceList(imageList).isEmpty {
+            return nil
+        }
+        return imageList == .liked ? #imageLiteral(resourceName: "noLikedImages") : #imageLiteral(resourceName: "noSavedImages")
     }
 }

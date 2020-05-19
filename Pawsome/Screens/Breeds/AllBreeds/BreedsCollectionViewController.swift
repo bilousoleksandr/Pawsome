@@ -10,6 +10,8 @@ import UIKit
 
 final class BreedsCollectionViewController : UICollectionViewController {
     private let breedViewModel : BreedViewModel
+    private var errorView = NetworkErrorView()
+    private let indicatorView = UIActivityIndicatorView(style: .gray)
     
     init(collectionViewLayout layout: UICollectionViewLayout, breedViewModel : BreedViewModel = BreedViewModel()) {
         self.breedViewModel = breedViewModel
@@ -32,18 +34,54 @@ final class BreedsCollectionViewController : UICollectionViewController {
         setStandartBackButton()
         let longTapGesture = UILongPressGestureRecognizer(target: self, action: #selector(longTapPressed(sender:)))
         collectionView.addGestureRecognizer(longTapGesture)
+        errorView = NetworkErrorView()
+        errorView.requestAction = { [weak self] in
+            self?.breedViewModel.fetchBreedsList()
+            self?.indicatorView.startAnimating()
+        }
+        setupActivityIndicator()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if breedViewModel.breedsCount == 0 {
+            breedViewModel.fetchBreedsList()
+            indicatorView.startAnimating()
+        }
+    }
+    
+    private func setupActivityIndicator() {
+        view.addSubview(indicatorView)
+        indicatorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            indicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            indicatorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: StyleGuide.Spaces.double)
+        ])
+    }
+    
+    private func addErrorView() {
+        view.addSubview(errorView)
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            errorView.widthAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
+            errorView.heightAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
+            errorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            errorView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -StyleGuide.Spaces.double)
+        ])
     }
     
     private func setupBreedModel () {
         breedViewModel.breedsDidLoad = { [weak self] in
+            if let view = self?.errorView {
+                view.removeFromSuperview()
+            }
+            self?.indicatorView.stopAnimating()
             self?.collectionView.reloadData()
         }
-        breedViewModel.breeadsFailedLoad = {
-            //TODO:- dont dorget to handle network error -
-            let alert = UIAlertController(title: "fdh", message: "fghfhg", preferredStyle: .actionSheet)
-            self.present(alert, animated: true, completion: nil)
+        breedViewModel.breeadsFailedLoad = { [weak self] in
+            self?.addErrorView()
+            self?.indicatorView.stopAnimating()
         }
-        breedViewModel.fetchBreedsList()
     }
     
     private func longPressStartedHandler (at point : CGPoint) {

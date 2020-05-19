@@ -24,4 +24,13 @@ struct Button {
         button.backgroundColor = backgroundColor
         return button
     }
+    
+    static func makeRoundedButton(_ title : String, backgroundColor : UIColor?) -> UIButton {
+        let btn = UIButton(type: .custom)
+        btn.setAttributedTitle(NSAttributedString(string: title, attributes: String.attributedString(UIFont.boldSystemFont(ofSize: 20), UIColor.white, .center)), for: .normal)
+        btn.backgroundColor = backgroundColor
+        btn.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        btn.roundCorners(radius: StyleGuide.CornersRadius.buttons)
+        return btn
+    }
 }

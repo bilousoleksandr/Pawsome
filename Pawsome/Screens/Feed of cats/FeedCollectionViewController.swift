@@ -11,6 +11,8 @@ import UIKit
 final class FeedCollectionViewController : UICollectionViewController {
     private var feedViewModel : FeedViewModel
     private var categoriesCollectionView : ImageCategoriesCollectionView
+    private let networkErrorView = NetworkErrorView()
+    private let loadingIndicator = UIActivityIndicatorView(style: .gray)
     
     init(feedViewModel : FeedViewModel = FeedViewModel()) {
         self.feedViewModel = feedViewModel
@@ -27,28 +29,13 @@ final class FeedCollectionViewController : UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(categoriesCollectionView)
+        view.addSubview(loadingIndicator)
         collectionView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         collectionView.prefetchDataSource = self
         collectionView.delegate = self
         collectionView.registerReusableCell(SingleViewFeedCell.self)
         setStandartBackButton()
-        
-        feedViewModel.categoriesListDidChange = { [weak self] (viewModel) in
-            self?.categoriesCollectionView.allCategories = viewModel.imageCategories
-        }
-        categoriesCollectionView.callbackAction = { [weak self] selectedName in
-            guard let self = self  else { return }
-            let category = self.feedViewModel.selectedCategory(name: selectedName)
-            self.presentFullScreenController(with: nil, and: category)
-        }
-        
-        feedViewModel.imagesListDidChange = { [weak self] (feedViewModel) in
-            guard let self = self else { fatalError() }
-            self.collectionView.performBatchUpdates({
-                let indexSet = IndexSet(self.collectionView.numberOfSections..<(self.feedViewModel.imagesCount / 9 * 2))
-                self.collectionView.insertSections(indexSet)
-            }, completion: nil)
-        }
+        setupCallbacks()
         collectionView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longTapAction(sender:))))
         setupConstrains()
     }
@@ -58,8 +45,57 @@ final class FeedCollectionViewController : UICollectionViewController {
         feedViewModel.saveImagesOnDisk()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        if collectionView.numberOfSections == 0 {
+            feedViewModel.showNewImages()
+            loadingIndicator.startAnimating()
+        }
+    }
+    
+    private func setupCallbacks() {
+        feedViewModel.categoriesListDidChange = { [weak self] (viewModel) in
+            self?.categoriesCollectionView.allCategories = viewModel.imageCategories
+        }
+        feedViewModel.listDidFailLoading = { [weak self] in
+            guard let sections = self?.collectionView.numberOfSections, sections == 0 else { return }
+            self?.setupErrorView()
+            self?.loadingIndicator.stopAnimating()
+        }
+        feedViewModel.imagesListDidChange = { [weak self] (feedViewModel) in
+            guard let self = self else { fatalError() }
+            self.collectionView.performBatchUpdates({
+                let indexSet = IndexSet(self.collectionView.numberOfSections..<(self.feedViewModel.imagesCount / 9 * 2))
+                self.collectionView.insertSections(indexSet)
+            }, completion: nil)
+            self.loadingIndicator.stopAnimating()
+            self.networkErrorView.removeFromSuperview()
+        }
+        categoriesCollectionView.callbackAction = { [weak self] selectedName in
+            guard let self = self  else { return }
+            let category = self.feedViewModel.selectedCategory(name: selectedName)
+            self.presentFullScreenController(with: nil, and: category)
+        }
+        networkErrorView.requestAction = { [weak self] in
+            self?.feedViewModel.showNewImages()
+            self?.feedViewModel.loadCategories()
+            self?.loadingIndicator.startAnimating()
+        }
+    }
+    
+    private func setupErrorView() {
+        view.addSubview(networkErrorView)
+        networkErrorView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            networkErrorView.widthAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
+            networkErrorView.heightAnchor.constraint(equalToConstant: UIScreen.screenWidth()),
+            networkErrorView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            networkErrorView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -StyleGuide.Spaces.double)
+        ])
+    }
+    
     private func setupConstrains() {
-        [categoriesCollectionView, collectionView].forEach {
+        [categoriesCollectionView, collectionView, loadingIndicator].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
@@ -72,7 +108,10 @@ final class FeedCollectionViewController : UICollectionViewController {
             collectionView.topAnchor.constraint(equalTo: categoriesCollectionView.bottomAnchor, constant: 0),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 0),
+            loadingIndicator.topAnchor.constraint(equalTo: categoriesCollectionView.bottomAnchor, constant: StyleGuide.Spaces.single),
         ])
     }
     

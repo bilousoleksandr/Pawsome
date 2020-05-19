@@ -10,9 +10,11 @@ import UIKit
 
 final class SavedImagesViewController : UICollectionViewController {
     private var savedImagesModel : SavedImagesViewModelProtocol
+    private let imageView = UIImageView()
+    
     private var selectedImageSource : ImagesList = .liked {
         didSet {
-            self.collectionView.reloadData()
+            updateView()
         }
     }
     
@@ -44,6 +46,11 @@ final class SavedImagesViewController : UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        updateView()
+    }
+    
+    private func updateView() {
+        imageView.image = savedImagesModel.imageForEmptySource(selectedImageSource)
         self.collectionView.reloadData()
     }
     
@@ -56,12 +63,12 @@ final class SavedImagesViewController : UICollectionViewController {
         savedImagesModel.urlsArrayDidUpdate = { [weak self] _ in
             self?.collectionView.reloadData()
         }
-        view.addSubview(segmentedController)
+        [segmentedController, imageView].forEach { view.addSubview($0) }
         setupConstraints()
     }
     
     private func setupConstraints() {
-        [segmentedController, collectionView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        [segmentedController, collectionView, imageView].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         NSLayoutConstraint.activate([
             segmentedController.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
             segmentedController.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -70,7 +77,12 @@ final class SavedImagesViewController : UICollectionViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             collectionView.topAnchor.constraint(equalTo: segmentedController.bottomAnchor, constant: 0),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
+            
+            imageView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
+            imageView.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.7),
+            imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
 }
@@ -82,9 +94,7 @@ extension SavedImagesViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(SingleViewFeedCell.self, for: indexPath) else {
-            fatalError()
-        }
+        guard let cell = collectionView.dequeueReusableCell(SingleViewFeedCell.self, for: indexPath) else { fatalError() }
         savedImagesModel.savedImageForItem(at: indexPath.row, for: selectedImageSource) { (image) in
             cell.configure(with: image)
         }
