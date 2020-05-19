@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol FeedViewModelProtocol : class {
+protocol FeedViewModel : class {
     /// Call clousure if imagesList has changed
-    var imagesListDidChange : ((FeedViewModelProtocol) -> ())? {get set}
+    var imagesListDidChange : ((FeedViewModel) -> ())? {get set}
     /// Callback action which called after categories list did update
-    var categoriesListDidChange : ((FeedViewModelProtocol) -> ())? { get set }
+    var categoriesListDidChange : ((FeedViewModel) -> ())? { get set }
     /// Callback for loading error from server
     var listDidFailLoading : (() -> ())? {get set}
     /// Check if previous fetch is canceled before send one more request
@@ -31,16 +31,18 @@ protocol FeedViewModelProtocol : class {
     func saveImagesOnDisk()
     /// Load actual categories from server
     func loadCategories()
+    /// Return category model according to given name
+    func selectedCategory(name : String) -> Category
 }
 
-class FeedViewModel : FeedViewModelProtocol {
+class FeedViewModelImplementation : FeedViewModel {
     private let batchCount = 18
     private let networkService : NetworkService
     private let fileManagerService : FileManagerService
     private let userDefaultsService : UserDefaultService
-    var imagesListDidChange : ((FeedViewModelProtocol) -> ())?
+    var imagesListDidChange : ((FeedViewModel) -> ())?
     var listDidFailLoading : (() -> ())?
-    var categoriesListDidChange : ((FeedViewModelProtocol) -> ())? {
+    var categoriesListDidChange : ((FeedViewModel) -> ())? {
         didSet {
             loadCategories()
         }
@@ -108,8 +110,6 @@ class FeedViewModel : FeedViewModelProtocol {
     func getImage(for index: Int, complition: @escaping (UIImage?) -> Void) {
         fileManagerService.fetchImage(at: images[index].imageUrl, onSuccess:  { (image) in
             complition(image)
-        }, onFailure: {
-            print("error occured")
         })
     }
     

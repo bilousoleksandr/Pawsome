@@ -13,13 +13,13 @@ enum ImagesList : Int {
     case saved
 }
 
-protocol SavedImagesViewModelProtocol {
+protocol SavedImagesViewModel {
     /// Count of saved imaged on disk
     var savedImagesCount : Int { get }
     /// Count of liked images, that stored on disk
     var likedImagesCount : Int { get }
     /// Notify view if images URL count is updated
-    var urlsArrayDidUpdate : ((SavedImagesViewModelProtocol) -> Void)? { get set }
+    var urlsArrayDidUpdate : ((SavedImagesViewModel) -> Void)? { get set }
     /// Check if imageSource is empry and return special image of nil if some values exist
     func imageForEmptySource(_ imageList : ImagesList) -> UIImage?
     /// Load image from disk and return value if it exist
@@ -28,10 +28,10 @@ protocol SavedImagesViewModelProtocol {
     func urlForItem(at index : Int, for list : ImagesList) -> Image
 }
 
-final class SavedImagesViewModel : SavedImagesViewModelProtocol {
+final class SavedImagesViewModelImplementation : SavedImagesViewModel {
     private let userDefaultsService : UserDefaultService
     private let fileManagerService : FileManagerService
-    var urlsArrayDidUpdate : ((SavedImagesViewModelProtocol) -> Void)?
+    var urlsArrayDidUpdate : ((SavedImagesViewModel) -> Void)?
     private var savedImageUrls : [Image] = [] {
         didSet {
             callback()
@@ -86,8 +86,6 @@ final class SavedImagesViewModel : SavedImagesViewModelProtocol {
         let source = sourceList(list)
         fileManagerService.fetchImage(at: source[index].imageUrl, onSuccess: { (image) in
             onSuccess(image)
-        }, onFailure:  {
-            print("Error occured")
         })
     }
     

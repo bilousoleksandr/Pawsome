@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SingleImageViewModelProtocol {
+protocol SingleImageViewModel {
     /// Check if current image is liked
     var isLiked : Bool { get }
     /// Check if current image is saved
@@ -21,7 +21,7 @@ protocol SingleImageViewModelProtocol {
     func likeImage(isSelected : Bool)
 }
 
-struct SingleImageViewModel : SingleImageViewModelProtocol {
+struct SingleImageViewModelImplementation : SingleImageViewModel {
     private let image : Image
     private let fileManagerService : FileManagerService
     private let userDefaultsService : UserDefaultService
@@ -42,8 +42,6 @@ struct SingleImageViewModel : SingleImageViewModelProtocol {
     func fechImage(complition: @escaping (UIImage?) -> Void) {
         fileManagerService.fetchImage(at: image.imageUrl, onSuccess: { (image) in
             complition(image)
-        }, onFailure: {
-            
         })
     }
     

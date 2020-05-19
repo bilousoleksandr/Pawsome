@@ -58,7 +58,7 @@ struct Weight : Codable {
 }
 
 // MARK: - BreedViewModelProtocol
-protocol BreedViewModelProtocol : class  {
+protocol BreedViewModel : class  {
     /// Callback for successfull data fetching and serialization
     var breedsDidLoad : (() -> Void)? { get set }
     /// Call clousure if loading did failed or something go wrong during data serialization
@@ -73,7 +73,7 @@ protocol BreedViewModelProtocol : class  {
     func singleBreed(for index : Int) -> Breed
 }
 
-class BreedViewModel : BreedViewModelProtocol {
+class BreedViewModelImplementation : BreedViewModel {
     private let networkService : NetworkService
     private var breeds : [Breed] = []
     var breedsDidLoad : (() -> Void)?

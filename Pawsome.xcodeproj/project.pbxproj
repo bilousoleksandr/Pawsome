@@ -24,7 +24,6 @@
 		E84BE34A246448FF00A8E1E9 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE349246448FF00A8E1E9 /* AppContext.swift */; };
 		E84BE34C24644A6000A8E1E9 /* FileManagerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */; };
 		E84BE34F2464573400A8E1E9 /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */; };
-		E84BE351246457A600A8E1E9 /* FullScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */; };
 		E84BE35324645AA300A8E1E9 /* FullScreenTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E84BE35224645AA300A8E1E9 /* FullScreenTableViewCell.swift */; };
 		E8542EEB245B12C7008D56B0 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8542EEA245B12C7008D56B0 /* Strings.swift */; };
 		E8542EEF245B130A008D56B0 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8542EEE245B130A008D56B0 /* NetworkService.swift */; };
@@ -90,6 +89,7 @@
 		E8937940246EDB6100AB87A7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = E893793F246EDB6100AB87A7 /* String.swift */; };
 		E8937943246F01BF00AB87A7 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8937942246F01BF00AB87A7 /* UIImageView.swift */; };
 		E89E133824740E70000D82B3 /* NetworkErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E133724740E70000D82B3 /* NetworkErrorView.swift */; };
+		E89E133A24743B07000D82B3 /* FullScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E133924743B07000D82B3 /* FullScreenViewModel.swift */; };
 		E89EFA8C246AE41100D5D215 /* HeaderDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA89246AE41100D5D215 /* HeaderDetailsView.swift */; };
 		E89EFA8D246AE41100D5D215 /* BreedHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA8A246AE41100D5D215 /* BreedHeaderView.swift */; };
 		E89EFA8E246AE41100D5D215 /* BreedFeatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89EFA8B246AE41100D5D215 /* BreedFeatureView.swift */; };
@@ -126,7 +126,6 @@
 		E84BE349246448FF00A8E1E9 /* AppContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
 		E84BE34B24644A6000A8E1E9 /* FileManagerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerService.swift; sourceTree = "<group>"; };
 		E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
-		E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewModel.swift; sourceTree = "<group>"; };
 		E84BE35224645AA300A8E1E9 /* FullScreenTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenTableViewCell.swift; sourceTree = "<group>"; };
 		E8542EEA245B12C7008D56B0 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E8542EEE245B130A008D56B0 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
@@ -192,6 +191,7 @@
 		E893793F246EDB6100AB87A7 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		E8937942246F01BF00AB87A7 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		E89E133724740E70000D82B3 /* NetworkErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorView.swift; sourceTree = "<group>"; };
+		E89E133924743B07000D82B3 /* FullScreenViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullScreenViewModel.swift; sourceTree = "<group>"; };
 		E89EFA89246AE41100D5D215 /* HeaderDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HeaderDetailsView.swift; path = Pawsome/Screens/HeaderDetailsView.swift; sourceTree = SOURCE_ROOT; };
 		E89EFA8A246AE41100D5D215 /* BreedHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreedHeaderView.swift; path = Pawsome/Screens/BreedHeaderView.swift; sourceTree = SOURCE_ROOT; };
 		E89EFA8B246AE41100D5D215 /* BreedFeatureView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BreedFeatureView.swift; path = Pawsome/Screens/BreedFeatureView.swift; sourceTree = SOURCE_ROOT; };
@@ -246,7 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				E84BE34E2464573400A8E1E9 /* FullScreenViewController.swift */,
-				E84BE350246457A600A8E1E9 /* FullScreenViewModel.swift */,
+				E89E133924743B07000D82B3 /* FullScreenViewModel.swift */,
 			);
 			path = FullScreenFeed;
 			sourceTree = "<group>";
@@ -595,6 +595,7 @@
 				E8730D212472E7E1005EF0D4 /* AppSnapshot.swift in Sources */,
 				E82667EE245C5CC500CBAEA7 /* SingleBreedCollectionViewCell.swift in Sources */,
 				E8542EF7245B18CC008D56B0 /* UIColor.swift in Sources */,
+				E89E133A24743B07000D82B3 /* FullScreenViewModel.swift in Sources */,
 				E89EFA8D246AE41100D5D215 /* BreedHeaderView.swift in Sources */,
 				E8B42F7924657EDD00FBA2C8 /* BreedScrollView.swift in Sources */,
 				E8730D1D2472B8F3005EF0D4 /* ImageCategoriesCollectionView.swift in Sources */,
@@ -606,7 +607,6 @@
 				E8542EFB245B1CB1008D56B0 /* UITableView+CellRegistration.swift in Sources */,
 				E82667E2245C059900CBAEA7 /* FeedCollectionViewController.swift in Sources */,
 				E82B6CDA246D692400D6F38D /* UIView+Animation.swift in Sources */,
-				E84BE351246457A600A8E1E9 /* FullScreenViewModel.swift in Sources */,
 				E82667EC245C4B7C00CBAEA7 /* Label.swift in Sources */,
 				E85710372466CA2F00FEB4DD /* UIDevice+UUID.swift in Sources */,
 				E8B42F7D2465994400FBA2C8 /* BreedShortInfoView.swift in Sources */,

@@ -9,15 +9,13 @@
 import Foundation
 
 // MARK: - SingleBreedViewModelProtocol
-protocol SingleBreedViewModelProtocol : class  {
+protocol SingleBreedViewModel : class  {
     var averageLifeSpan : String { get }
     var averageWeight : String { get }
     var breedName : String { get }
     var breedDescription : String { get }
     var origin : String { get }
     var temperament : [String] { get }
-    var intelligence : String { get}
-    var socialNeeds : String {get}
     var natural : Int { get }
     var rare : Int { get }
     var experimental : Int { get }
@@ -27,16 +25,13 @@ protocol SingleBreedViewModelProtocol : class  {
     func temperament(for index: Int) -> String
 }
 
-final class SingleBreeViewModel : SingleBreedViewModelProtocol {
+final class SingleBreeViewModelImplementation : SingleBreedViewModel {
     private let breed : Breed
     var averageLifeSpan: String { breed.lifeSpan.replacingOccurrences(of: " ", with: "") }
     var averageWeight: String { breed.weight.metricWeight.replacingOccurrences(of: " ", with: "") }
     var breedName: String { breed.breedName }
     var breedDescription: String { breed.breedDescription }
     var origin: String { breed.origin}
-    var strangerFriendly : String { "\(breed.strangerFriendly)/5" }
-    var intelligence : String { "\(breed.intelligence)/5" }
-    var socialNeeds : String { "\(breed.socialNeeds)/5" }
     var natural : Int { breed.natural }
     var rare : Int { breed.rare }
     var experimental : Int { breed.experimental }

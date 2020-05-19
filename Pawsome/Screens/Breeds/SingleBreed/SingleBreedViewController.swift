@@ -9,7 +9,7 @@
 import UIKit
 
 final class SingleBreedViewController : UIViewController {
-    private let breedViewModel : SingleBreeViewModel
+    private let breedViewModel : SingleBreedViewModel
     
     private lazy var collectionView : UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -30,7 +30,7 @@ final class SingleBreedViewController : UIViewController {
         return view
     } ()
     
-    init(breedViewModel : SingleBreeViewModel) {
+    init(breedViewModel : SingleBreedViewModel) {
         self.breedViewModel = breedViewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = breedViewModel.breedName
@@ -46,7 +46,6 @@ final class SingleBreedViewController : UIViewController {
         setupView()
         scrollView.configureBreedView(name: breedViewModel.breedName,
                                       origin: breedViewModel.origin,
-                                      friendlyText: breedViewModel.strangerFriendly,
                                       weight: breedViewModel.averageWeight,
                                       lifeSpan: breedViewModel.averageLifeSpan,
                                       breedText: breedViewModel.breedDescription,

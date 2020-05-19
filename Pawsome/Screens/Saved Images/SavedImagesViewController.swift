@@ -9,7 +9,7 @@
 import UIKit
 
 final class SavedImagesViewController : UICollectionViewController {
-    private var savedImagesModel : SavedImagesViewModelProtocol
+    private var savedImagesModel : SavedImagesViewModel
     private let imageView = UIImageView()
     
     private var selectedImageSource : ImagesList = .liked {
@@ -27,7 +27,7 @@ final class SavedImagesViewController : UICollectionViewController {
         return view
     } ()
     
-    init(savedImagesModel : SavedImagesViewModelProtocol = SavedImagesViewModel()) {
+    init(savedImagesModel : SavedImagesViewModel = SavedImagesViewModelImplementation()) {
         self.savedImagesModel = savedImagesModel
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -118,7 +118,7 @@ extension SavedImagesViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewModel = SingleImageViewModel(image: savedImagesModel.urlForItem(at: indexPath.row, for: selectedImageSource))
+        let viewModel = SingleImageViewModelImplementation(image: savedImagesModel.urlForItem(at: indexPath.row, for: selectedImageSource))
         let vc = SingleImageViewController(sinleImageViewModel: viewModel)
         self.navigationController?.pushViewController(vc, animated: true)
     }

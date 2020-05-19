@@ -56,7 +56,7 @@ struct Label {
     /// Multiline title for breed description
     static func makeBreedDescriptionLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
-            .font(UIFont.systemFont(ofSize: 16))
+            .font(UIFont.systemFont(ofSize: 18))
             .text(title)
             .lines(0)
             .lineBreak(.byWordWrapping)

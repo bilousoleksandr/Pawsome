@@ -94,7 +94,7 @@ final class BreedHeaderView : UIView {
     }
     
     /// configure view according to given breed ViewModel
-    func configure(name : String, origin: String, friendlyText : String, rare : Int, experimental : Int, natural : Int) {
+    func configure(name : String, origin: String, rare : Int, experimental : Int, natural : Int) {
         catImageView.image = UIImage(named: name)
         breedTitleLabel.text = name
         originLabel.text = Strings.origin

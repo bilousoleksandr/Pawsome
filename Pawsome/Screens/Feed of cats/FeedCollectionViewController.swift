@@ -14,7 +14,7 @@ final class FeedCollectionViewController : UICollectionViewController {
     private let networkErrorView = NetworkErrorView()
     private let loadingIndicator = UIActivityIndicatorView(style: .gray)
     
-    init(feedViewModel : FeedViewModel = FeedViewModel()) {
+    init(feedViewModel : FeedViewModel = FeedViewModelImplementation()) {
         self.feedViewModel = feedViewModel
         self.categoriesCollectionView = ImageCategoriesCollectionView()
         let flowLayout = CatFeedLayout()
@@ -137,11 +137,11 @@ final class FeedCollectionViewController : UICollectionViewController {
     
     private func presentFullScreenController(with imageModel : Image? = nil, and category : Category? = nil) {
         if let newImageModel = imageModel {
-            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModel(newImageModel))
+            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModelImplementation(newImageModel))
             navigationController?.pushViewController(vc, animated: true)
         }
         if let newCategory = category {
-            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModel(nil, newCategory))
+            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModelImplementation(nil, newCategory))
             navigationController?.pushViewController(vc, animated: true)
         }
     }

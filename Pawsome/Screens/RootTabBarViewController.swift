@@ -15,9 +15,7 @@ final class RootTabBarViewController : UITabBarController {
         tabBar.tintColor = UIColor.indianred
         tabBar.barTintColor = UIColor.lightBlue
         
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let breedsVC = BreedsCollectionViewController(collectionViewLayout: layout)
+        let breedsVC = BreedsCollectionViewController()
         breedsVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "breedTabBar"), selectedImage: nil)
         
         let feedVC = FeedCollectionViewController()

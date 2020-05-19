@@ -13,7 +13,9 @@ final class BreedsCollectionViewController : UICollectionViewController {
     private var errorView = NetworkErrorView()
     private let indicatorView = UIActivityIndicatorView(style: .gray)
     
-    init(collectionViewLayout layout: UICollectionViewLayout, breedViewModel : BreedViewModel = BreedViewModel()) {
+    init(breedViewModel : BreedViewModel = BreedViewModelImplementation()) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
         self.breedViewModel = breedViewModel
         super.init(collectionViewLayout: layout)
         navigationItem.title = Strings.breeds
@@ -86,7 +88,7 @@ final class BreedsCollectionViewController : UICollectionViewController {
     
     private func longPressStartedHandler (at point : CGPoint) {
         if let indexPath = collectionView.indexPathForItem(at: point) {
-            let singleBreed = SingleBreeViewModel(breed: breedViewModel.singleBreed(for: indexPath.row))
+            let singleBreed = SingleBreeViewModelImplementation(breed: breedViewModel.singleBreed(for: indexPath.row))
             let vc = BreedShortInfoViewController(breedMViewModel: singleBreed)
             showFullScreen(vc)
         }
@@ -147,7 +149,7 @@ extension BreedsCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = SingleBreedViewController(breedViewModel: SingleBreeViewModel(breed: breedViewModel.singleBreed(for: indexPath.row)))
+        let vc = SingleBreedViewController(breedViewModel: SingleBreeViewModelImplementation(breed: breedViewModel.singleBreed(for: indexPath.row)))
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }

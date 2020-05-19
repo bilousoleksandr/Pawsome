@@ -10,8 +10,8 @@ import UIKit
 
 final class NetworkErrorView : UIView {
     private let imageView = UIImageView(image: #imageLiteral(resourceName: "cryCat"))
-    private let textLabel = Label.makeTitleLabel(with: "Can't load data")
-    private let newRequestButton = Button.makeRoundedButton("Try again", backgroundColor: UIColor.salmon)
+    private let textLabel = Label.makeTitleLabel(with: Strings.cantLoad)
+    private let newRequestButton = Button.makeRoundedButton(Strings.tryAgain, backgroundColor: UIColor.salmon)
     private var requestCallback : (() -> ())?
     
     var requestAction : (() -> ())? {

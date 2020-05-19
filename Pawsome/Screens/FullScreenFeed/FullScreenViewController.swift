@@ -39,6 +39,11 @@ final class FullScreenViewController : UITableViewController {
                 }, completion: nil )
             }
         }
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         fullScreenViewModel.showNewImages()
     }
     

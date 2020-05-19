@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol FullScreenViewModelProtocol {
+protocol FullScreenViewModel {
     /// Total amount of loaded images that stored in viewModel
     var itemsCount : Int { get }
     /// Call clousure if amount of images in model has chaged
-    var imagesListDidChange : ((FullScreenViewModelProtocol) -> Void)? {get set}
+    var imagesListDidChange : ((FullScreenViewModel) -> Void)? {get set}
     /// Return title for fullScreen NavigationController
     var navigationItemTitle : String { get }
     /// Load new imaged from service and notify
@@ -31,7 +31,7 @@ protocol FullScreenViewModelProtocol {
     func likeImage(at index : Int)
 }
 
-final class FullScreenViewModel : FullScreenViewModelProtocol {
+final class FullScreenViewModelImplementation : FullScreenViewModel {
     private let batchAmount = 5
     private let networkService : NetworkService
     private let userDefaultsService : UserDefaultService
@@ -50,7 +50,7 @@ final class FullScreenViewModel : FullScreenViewModelProtocol {
     private var isLoading = false
     
     var itemsCount : Int { images.count }
-    var imagesListDidChange : ((FullScreenViewModelProtocol) -> Void)?
+    var imagesListDidChange : ((FullScreenViewModel) -> Void)?
     var navigationItemTitle : String { return category?.name.capitalizedFirst ?? Strings.similarCats }
     
     init(_ image : Image? = nil,
@@ -98,8 +98,6 @@ final class FullScreenViewModel : FullScreenViewModelProtocol {
         if index < images.count {
             fileManagerService.fetchImage(at: images[index].imageUrl, onSuccess:  { (image) in
                 onSuccess(image)
-            }, onFailure: {
-                
             })
         }
     }

@@ -28,3 +28,5 @@
 "personalImages" = "Personal images";
 "liked" = "Liked";
 "singleImage" = "Single image";
+"cantLoad" = "Can't load data";
+"tryAgain" = "Try again";
