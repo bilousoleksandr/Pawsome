@@ -13,7 +13,7 @@ struct Label {
     static func makeTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .color(textColor)
-            .font(UIFont.boldSystemFont(ofSize: 26))
+            .font(Font.mainTitle.uiFont)
             .text(title)
             .lines(2)
             .lineBreak(.byWordWrapping)
@@ -22,7 +22,7 @@ struct Label {
     /// Title for breeds in collectionView
     static func makeBreedTitleLabel (with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         Label.makeTitleLabel(with: title)
-            .font(UIFont.boldSystemFont(ofSize: 24))
+            .font(Font.breedTitle.uiFont)
             .alignment(.center)
     }
     
@@ -31,14 +31,14 @@ struct Label {
         Label.makeTitleLabel()
             .color(textColor)
             .text(title)
-            .font(UIFont.boldSystemFont(ofSize: 20))
+            .font(Font.breedDetailsTitle.uiFont)
             .alignment(.center)
     }
     
     static func makeSubtitleLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .color(textColor)
-            .font(UIFont.systemFont(ofSize: 18))
+            .font(Font.subtitle.uiFont)
             .text(title)
             .adjustFontSize()
     }
@@ -47,7 +47,7 @@ struct Label {
     static func makeBreedDetailsLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
             .color(textColor)
-            .font(UIFont.systemFont(ofSize: 16))
+            .font(Font.breedDetailsText.uiFont)
             .text(title)
             .lines(2)
             .lineBreak(.byWordWrapping)
@@ -56,7 +56,7 @@ struct Label {
     /// Multiline title for breed description
     static func makeBreedDescriptionLabel(with title: String? = nil, textColor: UIColor = UIColor.blus) -> UILabel {
         UILabel()
-            .font(UIFont.systemFont(ofSize: 18))
+            .font(Font.subtitle.uiFont)
             .text(title)
             .lines(0)
             .lineBreak(.byWordWrapping)

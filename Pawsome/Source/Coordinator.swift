@@ -26,19 +26,18 @@ final class ApplicationCoordinator : Coordinator {
     
     func start() {
         let rootController = RootTabBarViewController()
-        
         let breedsCoordinator = BreedsCoordinator()
         breedsCoordinator.rootViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "breedTabBar"), selectedImage: nil)
         let feedCoordinator = FeedCoordinator()
         feedCoordinator.rootViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "feedTabBar"), selectedImage: nil)
         let savedImagesCoordinator = SavedImagesCoordinator()
         savedImagesCoordinator.rootViewController.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "savedImagesTabBar"), selectedImage: nil)
-        childCoordinators = [breedsCoordinator, feedCoordinator, savedImagesCoordinator]
         
+        childCoordinators = [breedsCoordinator, feedCoordinator, savedImagesCoordinator]
         childCoordinators.forEach({
             $0.start()
             $0.rootViewController.navigationBar.barTintColor = UIColor.lightBlue
-            $0.rootViewController.navigationBar.titleTextAttributes = String.attributedString(UIFont.boldSystemFont(ofSize: 22),
+            $0.rootViewController.navigationBar.titleTextAttributes = String.attributedString(Font.navigationTitle.uiFont,
                                                                                               UIColor.blus,
                                                                                               .center)
         })

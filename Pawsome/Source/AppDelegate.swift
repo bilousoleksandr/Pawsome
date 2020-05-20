@@ -23,8 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         context = AppContext.context()
-        window = UIWindow(frame: UIScreen.main.bounds)
-        coordinator = ApplicationCoordinator(window: window!)
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        self.window = window
+        coordinator = ApplicationCoordinator(window: window)
         coordinator.start()
         return true
     }

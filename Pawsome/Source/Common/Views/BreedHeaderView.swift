@@ -17,13 +17,7 @@ final class BreedHeaderView : UIView {
     private let rareImageView = UIImageView()
     private let experimentalImageView = UIImageView()
     private let naturalImageView = UIImageView()
-    
-    private let originDetailsLabel : UILabel = {
-        let label = Label.makeSubtitleLabel()
-        label.font = UIFont.boldSystemFont(ofSize: label.font.pointSize)
-        return label
-    } ()
-    
+    private let originDetailsLabel = Label.makeBreedDetailsTitleLabel()
     private let breedTitleLabel = Label.makeTitleLabel()
     
     override init(frame: CGRect = .zero) {
