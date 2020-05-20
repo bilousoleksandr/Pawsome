@@ -11,26 +11,8 @@ import UIKit
 final class RootTabBarViewController : UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tabBar.tintColor = UIColor.indianred
         tabBar.barTintColor = UIColor.lightBlue
-        
-        let breedsVC = BreedsCollectionViewController()
-        breedsVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "breedTabBar"), selectedImage: nil)
-        
-        let feedVC = FeedCollectionViewController()
-        feedVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "feedTabBar"), selectedImage: nil)
-        
-        let savedVC = SavedImagesViewController()
-        savedVC.tabBarItem = UITabBarItem(title: nil, image: #imageLiteral(resourceName: "savedImagesTabBar"), selectedImage: nil)
-        
-        let navControllers = [breedsVC, feedVC, savedVC].map { vc -> UINavigationController in
-            let nc = UINavigationController(rootViewController: vc)
-            nc.navigationBar.barTintColor = UIColor.lightBlue
-            nc.navigationBar.titleTextAttributes = String.attributedString(UIFont.boldSystemFont(ofSize: 22), UIColor.blus, .center)
-            return nc
-        }
-        setViewControllers(navControllers, animated: true)
     }
 }
 

@@ -69,13 +69,16 @@ protocol BreedViewModel : class  {
     func fetchBreedsList()
     /// Return breed name and origin for given index
     func breedDetails(for index : Int) -> (name : String, origin : String)
-    /// Return breed for given index
-    func singleBreed(for index : Int) -> Breed
+    ///
+    func showShortBreedInfo(at index: Int)
+    ///
+    func showFullBreedInfo(at index: Int)
 }
 
 class BreedViewModelImplementation : BreedViewModel {
     private let networkService : NetworkService
     private var breeds : [Breed] = []
+    weak var coordinator : BreedsCoordinator?
     var breedsDidLoad : (() -> Void)?
     var breeadsFailedLoad : (() -> Void)?
     var breedsCount : Int { breeds.count }
@@ -102,7 +105,15 @@ class BreedViewModelImplementation : BreedViewModel {
         return (name: sourceBreed.breedName, origin: sourceBreed.origin)
     }
     
-    func singleBreed(for index : Int) -> Breed {
+    private func singleBreed(for index : Int) -> Breed {
         breeds[index]
+    }
+    
+    func showShortBreedInfo(at index: Int) {
+        coordinator?.presentBreedShortInfo(breed: singleBreed(for: index))
+    }
+    
+    func showFullBreedInfo(at index: Int) {
+        coordinator?.presentBreedFullInfo(breed: singleBreed(for: index))
     }
 }

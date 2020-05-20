@@ -33,6 +33,10 @@ protocol FeedViewModel : class {
     func loadCategories()
     /// Return category model according to given name
     func selectedCategory(name : String) -> Category
+    ///
+    func showLargeImage(at index : Int)
+    ///
+    func presentFullScreenFeed(withImageIndex index: Int?, and category : Category?)
 }
 
 class FeedViewModelImplementation : FeedViewModel {
@@ -40,6 +44,7 @@ class FeedViewModelImplementation : FeedViewModel {
     private let networkService : NetworkService
     private let fileManagerService : FileManagerService
     private let userDefaultsService : UserDefaultService
+    weak var coordinator : FeedCoordinator?
     var imagesListDidChange : ((FeedViewModel) -> ())?
     var listDidFailLoading : (() -> ())?
     var categoriesListDidChange : ((FeedViewModel) -> ())? {
@@ -130,5 +135,20 @@ class FeedViewModelImplementation : FeedViewModel {
     
     func saveImagesOnDisk() {
         userDefaultsService.saveFeedImages(images)
+    }
+    
+    func showLargeImage(at index : Int) {
+        getImage(for: index) { [weak self] (image) in
+            self?.coordinator?.presentFullScreenImage(image: image)
+        }
+    }
+    
+    func presentFullScreenFeed(withImageIndex index: Int?, and category : Category?) {
+        guard let newIndex = index else {
+            coordinator?.presentFullScreenFeed(with: nil, and: category)
+            return
+        }
+        let imageModel = imageForPressedItem(at: newIndex)
+        coordinator?.presentFullScreenFeed(with: imageModel, and: category)
     }
 }

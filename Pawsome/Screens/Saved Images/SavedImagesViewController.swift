@@ -118,8 +118,6 @@ extension SavedImagesViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let viewModel = SingleImageViewModelImplementation(image: savedImagesModel.urlForItem(at: indexPath.row, for: selectedImageSource))
-        let vc = SingleImageViewController(sinleImageViewModel: viewModel)
-        self.navigationController?.pushViewController(vc, animated: true)
+        savedImagesModel.presentFullScreenImage(at: indexPath.row, for: selectedImageSource)
     }
 }

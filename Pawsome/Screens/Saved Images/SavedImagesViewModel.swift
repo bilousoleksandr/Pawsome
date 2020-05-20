@@ -24,13 +24,14 @@ protocol SavedImagesViewModel {
     func imageForEmptySource(_ imageList : ImagesList) -> UIImage?
     /// Load image from disk and return value if it exist
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void)
-    ///URL for item at specific path
-    func urlForItem(at index : Int, for list : ImagesList) -> Image
+    ///
+    func presentFullScreenImage(at index : Int, for list : ImagesList)
 }
 
 final class SavedImagesViewModelImplementation : SavedImagesViewModel {
     private let userDefaultsService : UserDefaultService
     private let fileManagerService : FileManagerService
+    weak var coordinator : SavedImagesCoordinator?
     var urlsArrayDidUpdate : ((SavedImagesViewModel) -> Void)?
     private var savedImageUrls : [Image] = [] {
         didSet {
@@ -89,7 +90,7 @@ final class SavedImagesViewModelImplementation : SavedImagesViewModel {
         })
     }
     
-    func urlForItem(at index : Int, for list : ImagesList) -> Image {
+    private func imageForItem(at index : Int, for list : ImagesList) -> Image {
         let source = sourceList(list)
         return source[index]
     }
@@ -100,5 +101,10 @@ final class SavedImagesViewModelImplementation : SavedImagesViewModel {
             return nil
         }
         return imageList == .liked ? #imageLiteral(resourceName: "noLikedImages") : #imageLiteral(resourceName: "noSavedImages")
+    }
+    
+    func presentFullScreenImage(at index : Int, for list : ImagesList) {
+        let image = imageForItem(at: index, for: list)
+        coordinator?.showFullScreenImage(image: image)
     }
 }

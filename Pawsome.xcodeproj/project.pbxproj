@@ -11,6 +11,7 @@
 		E812315E245DA94100040C2B /* SingleViewFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E812315D245DA94100040C2B /* SingleViewFeedCell.swift */; };
 		E81ECDE224603F4800E9A63E /* BreedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81ECDE124603F4800E9A63E /* BreedViewModel.swift */; };
 		E81ECDE42460440100E9A63E /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E81ECDE32460440100E9A63E /* FeedViewModel.swift */; };
+		E826125124753A29002286E4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E826125024753A29002286E4 /* Coordinator.swift */; };
 		E82667E2245C059900CBAEA7 /* FeedCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82667E1245C059900CBAEA7 /* FeedCollectionViewController.swift */; };
 		E82667E4245C074900CBAEA7 /* UIView+Corners.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82667E3245C074900CBAEA7 /* UIView+Corners.swift */; };
 		E82667E8245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E82667E7245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift */; };
@@ -114,6 +115,7 @@
 		E812315D245DA94100040C2B /* SingleViewFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleViewFeedCell.swift; sourceTree = "<group>"; };
 		E81ECDE124603F4800E9A63E /* BreedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedViewModel.swift; sourceTree = "<group>"; };
 		E81ECDE32460440100E9A63E /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		E826125024753A29002286E4 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E82667E1245C059900CBAEA7 /* FeedCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewController.swift; sourceTree = "<group>"; };
 		E82667E3245C074900CBAEA7 /* UIView+Corners.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Corners.swift"; sourceTree = "<group>"; };
 		E82667E7245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreedDetailsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -465,6 +467,7 @@
 				E8B42F77246576DA00FBA2C8 /* Resources */,
 				E8E35FF7245AE31A0088EDB2 /* Info.plist */,
 				E84BE349246448FF00A8E1E9 /* AppContext.swift */,
+				E826125024753A29002286E4 /* Coordinator.swift */,
 			);
 			path = Pawsome;
 			sourceTree = "<group>";
@@ -614,6 +617,7 @@
 				E85710372466CA2F00FEB4DD /* UIDevice+UUID.swift in Sources */,
 				E8B42F7D2465994400FBA2C8 /* BreedShortInfoView.swift in Sources */,
 				E84B66FC2470026600BAB239 /* SingleImageViewModel.swift in Sources */,
+				E826125124753A29002286E4 /* Coordinator.swift in Sources */,
 				E8F1DD7A2461A813002CCAF3 /* UIViewController+PresentingVC.swift in Sources */,
 				E82667E8245C13D000CBAEA7 /* BreedDetailsCollectionViewCell.swift in Sources */,
 				E8BC3B842465C18B00C839D4 /* SavedImagesViewModel.swift in Sources */,

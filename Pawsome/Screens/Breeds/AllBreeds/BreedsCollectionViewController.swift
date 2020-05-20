@@ -88,9 +88,7 @@ final class BreedsCollectionViewController : UICollectionViewController {
     
     private func longPressStartedHandler (at point : CGPoint) {
         if let indexPath = collectionView.indexPathForItem(at: point) {
-            let singleBreed = SingleBreeViewModelImplementation(breed: breedViewModel.singleBreed(for: indexPath.row))
-            let vc = BreedShortInfoViewController(breedMViewModel: singleBreed)
-            showFullScreen(vc)
+            breedViewModel.showShortBreedInfo(at: indexPath.row)
         }
     }
     
@@ -149,7 +147,6 @@ extension BreedsCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = SingleBreedViewController(breedViewModel: SingleBreeViewModelImplementation(breed: breedViewModel.singleBreed(for: indexPath.row)))
-        self.navigationController?.pushViewController(vc, animated: true)
+        breedViewModel.showFullBreedInfo(at: indexPath.row)
     }
 }

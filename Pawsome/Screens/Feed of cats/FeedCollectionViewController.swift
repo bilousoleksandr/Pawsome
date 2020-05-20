@@ -48,8 +48,7 @@ final class FeedCollectionViewController : UICollectionViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         if collectionView.numberOfSections == 0 {
-            feedViewModel.showNewImages()
-            loadingIndicator.startAnimating()
+            updateData()
         }
     }
     
@@ -74,13 +73,17 @@ final class FeedCollectionViewController : UICollectionViewController {
         categoriesCollectionView.callbackAction = { [weak self] selectedName in
             guard let self = self  else { return }
             let category = self.feedViewModel.selectedCategory(name: selectedName)
-            self.presentFullScreenController(with: nil, and: category)
+            self.feedViewModel.presentFullScreenFeed(withImageIndex: nil, and: category)
         }
         networkErrorView.requestAction = { [weak self] in
-            self?.feedViewModel.showNewImages()
-            self?.feedViewModel.loadCategories()
-            self?.loadingIndicator.startAnimating()
+            self?.updateData()
         }
+    }
+    
+    private func updateData() {
+        feedViewModel.showNewImages()
+        feedViewModel.loadCategories()
+        loadingIndicator.startAnimating()
     }
     
     private func setupErrorView() {
@@ -125,25 +128,12 @@ final class FeedCollectionViewController : UICollectionViewController {
     
     private func longPressDidBeganHandler(at point : CGPoint) {
         if let indexPath = collectionView.indexPathForItem(at: point) {
-            feedViewModel.getImage(for: indexPathToIndex(indexPath: indexPath)) { [weak self] (image) in
-                self?.showLagreImage(image)
-            }
+            feedViewModel.showLargeImage(at: indexPathToIndex(indexPath: indexPath))
         }
     }
     
     private func longPressDidEndHandler() {
         presentedViewController?.dismiss(animated: true, completion: nil)
-    }
-    
-    private func presentFullScreenController(with imageModel : Image? = nil, and category : Category? = nil) {
-        if let newImageModel = imageModel {
-            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModelImplementation(newImageModel))
-            navigationController?.pushViewController(vc, animated: true)
-        }
-        if let newCategory = category {
-            let vc = FullScreenViewController(fullScreenViewModel: FullScreenViewModelImplementation(nil, newCategory))
-            navigationController?.pushViewController(vc, animated: true)
-        }
     }
 }
 
@@ -182,7 +172,7 @@ extension FeedCollectionViewController {
 extension FeedCollectionViewController : UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let maxSections = collectionView.numberOfSections
-        let targetIndexPath = IndexPath(row: 0, section: maxSections - 3)
+        let targetIndexPath = IndexPath(row: 0, section: maxSections - 2)
         let cells = collectionView.visibleCells.map({ collectionView.indexPath(for: $0) }).compactMap({ $0 })
         if cells.contains(targetIndexPath) {
             feedViewModel.showNewImages()
@@ -199,8 +189,7 @@ extension FeedCollectionViewController : UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let image = self.feedViewModel.imageForPressedItem(at: indexPathToIndex(indexPath: indexPath))
-        presentFullScreenController(with: image)
+        self.feedViewModel.presentFullScreenFeed(withImageIndex: indexPathToIndex(indexPath: indexPath), and: nil)
     }
 }
 
