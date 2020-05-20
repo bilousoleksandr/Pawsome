@@ -9,15 +9,15 @@
 
 Breed Screens
 
-![](https://media.giphy.com/media/eNkdsud1jQSDY3sMhD/giphy.gif)
-![](https://media.giphy.com/media/XfJLqaPEBFkjUkpPUc/giphy.gif)
-![](https://media.giphy.com/media/XdJmB6k98jSPjOG5t4/giphy.gif)
+![All breeds](https://media.giphy.com/media/eNkdsud1jQSDY3sMhD/giphy.gif)
+![Short info](https://media.giphy.com/media/XfJLqaPEBFkjUkpPUc/giphy.gif)
+![All breed info](https://media.giphy.com/media/XdJmB6k98jSPjOG5t4/giphy.gif)
 
 Cat's Feed
 
-![](https://media.giphy.com/media/LRmA8rTg7idvXnffph/giphy.gif)
-![](https://media.giphy.com/media/W2oEmncATez4CfEl52/giphy.gif)
-![](https://media.giphy.com/media/kGKASvDsx61iD4DiiX/giphy.gif)
+![Category feed](https://media.giphy.com/media/Q7EzpbkczQF7YaetmK/giphy.gif)
+![Similar cats feed](https://media.giphy.com/media/W2oEmncATez4CfEl52/giphy-downsized.gif)
+![Main feed](https://media.giphy.com/media/kGKASvDsx61iD4DiiX/giphy.gif)
 
 Saved images and gestures
 
