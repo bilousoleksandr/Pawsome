@@ -1,12 +1,11 @@
 # Pawsome
-# WeatherApp
 
-* weather and other conditions for current location 
-* main screen with 5 day / 3 hour forecast
-* settings for metric and imperial units
-* additional locations with current temperature and time
-* ability to specify current location
-* searchbar for countries and cities
+* details about popular breeds
+* additional screen with short and all info about selected breed
+* custom collectionView for cat's Feed
+* fullScreen feed with selected cats or specific category
+* abbility lo like / dislike photos
+* animations for like / save actions
 
 Breed Screens
 
@@ -16,9 +15,9 @@ Breed Screens
 
 Cat's Feed
 
-![](https://media.giphy.com/media/XGlrlzK0kPZduwTKID/giphy.gif)
-![](https://media.giphy.com/media/Q7EzpbkczQF7YaetmK/giphy.gif)
-![](https://media.giphy.com/media/LqUnPnaCL6LBzXMKV9/giphy.gif)
+![](https://media.giphy.com/media/LRmA8rTg7idvXnffph/giphy.gif)
+![](https://media.giphy.com/media/W2oEmncATez4CfEl52/giphy.gif)
+![](https://media.giphy.com/media/kGKASvDsx61iD4DiiX/giphy.gif)
 
 Saved images and gestures
 
