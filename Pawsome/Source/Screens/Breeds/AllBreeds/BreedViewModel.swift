@@ -69,9 +69,9 @@ protocol BreedViewModel : class  {
     func fetchBreedsList()
     /// Return breed name and origin for given index
     func breedDetails(for index : Int) -> (name : String, origin : String)
-    ///
+    /// Present view with short breed description
     func showShortBreedInfo(at index: Int)
-    ///
+    /// Show full screen breed info with all details
     func showFullBreedInfo(at index: Int)
 }
 

@@ -69,7 +69,7 @@ final class FullScreenViewController : UITableViewController {
     }
 }
 
-// MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource -
 extension FullScreenViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fullScreenViewModel.itemsCount
@@ -108,7 +108,7 @@ extension FullScreenViewController : UITableViewDataSourcePrefetching {
     }
 }
 
-// MARK: - Actions
+// MARK: - Actions - 
 @objc
 private extension FullScreenViewController {
     func backButtonPressed(sender: UIBarButtonItem) {

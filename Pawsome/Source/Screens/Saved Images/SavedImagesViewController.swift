@@ -87,7 +87,7 @@ final class SavedImagesViewController : UICollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource -
 extension SavedImagesViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return selectedImageSource == .liked ? savedImagesModel.likedImagesCount : savedImagesModel.savedImagesCount
@@ -102,7 +102,7 @@ extension SavedImagesViewController {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout -
 extension SavedImagesViewController : UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let size = (collectionView.bounds.width - 6) / 3

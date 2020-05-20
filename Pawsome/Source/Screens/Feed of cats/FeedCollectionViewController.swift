@@ -168,7 +168,7 @@ extension FeedCollectionViewController {
     }
 }
 
-// MARK: -
+// MARK: - UICollectionViewDataSourcePrefetching -
 extension FeedCollectionViewController : UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         let maxSections = collectionView.numberOfSections

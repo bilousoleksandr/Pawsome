@@ -114,7 +114,7 @@ final class SingleImageViewController : UIViewController {
     }
 }
 
-// MARK: - Actions
+// MARK: - Actions -
 @objc private extension SingleImageViewController {
     func pinchGestureAction (sender : UIPinchGestureRecognizer) {
         if sender.state == .began || sender.state == .changed {
@@ -143,7 +143,7 @@ final class SingleImageViewController : UIViewController {
     }
 }
 
-// MARK: UIGestureRecognizerDelegate
+// MARK: UIGestureRecognizerDelegate -
 extension SingleImageViewController : UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true

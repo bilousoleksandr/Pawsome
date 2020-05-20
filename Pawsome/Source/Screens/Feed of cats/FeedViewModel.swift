@@ -33,9 +33,9 @@ protocol FeedViewModel : class {
     func loadCategories()
     /// Return category model according to given name
     func selectedCategory(name : String) -> Category
-    ///
+    /// Present full screen image from given index
     func showLargeImage(at index : Int)
-    ///
+    /// Show feed with given start image
     func presentFullScreenFeed(withImageIndex index: Int?, and category : Category?)
 }
 

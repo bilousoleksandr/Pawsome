@@ -24,7 +24,7 @@ protocol SavedImagesViewModel {
     func imageForEmptySource(_ imageList : ImagesList) -> UIImage?
     /// Load image from disk and return value if it exist
     func savedImageForItem(at index : Int, for list : ImagesList, onSuccess: @escaping (UIImage?) -> Void)
-    ///
+    /// Show full screen saved image
     func presentFullScreenImage(at index : Int, for list : ImagesList)
 }
 
